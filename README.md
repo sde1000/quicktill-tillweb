@@ -4,7 +4,11 @@ Till web service
 Minimal infrastructure needed to bring up a read-only instance of
 quicktill.tillweb as a uwsgi service.
 
-Ensure quicktill3, nginx and uwsgi-plugin-python3 are installed.
+Ensure python3-django, nginx, uwsgi-plugin-python3 and quicktill3 are
+installed.
+
+If tillweb is still using matplotlib to draw pie charts,
+python3-matplotlib may be required as well.
 
 To configure, put a random secret in the file "secret_key", the name
 of the till database in the file "database_name" and the title for the
