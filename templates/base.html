@@ -1,0 +1,42 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>{% block title %}tillweb{% endblock %}</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+{% block style %}
+<link rel="STYLESHEET" type="text/css" href="{% static "style.css" %}">
+{% endblock %}
+{% block jquery %}
+{% endblock %}
+</head>
+<body>
+  <div id="Header">{% block heading %}Heading{% endblock %}</div>
+{% if is_paginated %} — page {{ page }} of {{ pages }}{% endif %}
+{% if nextlink %}
+<div class="navarrow">
+<a href="{{nextlink}}"><img src="{% static "right-arrow.svg" %}" width="40" alt="
+Next" />
+</a></div>
+{% endif %}
+{% if prevlink %}
+<div class="navarrow">
+<a href="{{prevlink}}"><img src="{% static "left-arrow.svg" %}" width="40" alt="P
+rev" />
+</a></div>
+{% endif %}
+  {% if messages %}
+  <div class="messages" id="messagediv">
+    <ul>
+      {% for message in messages %}
+      <li>{{message}}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  <div id="Content">
+    {% block content %}
+    {% endblock %}
+  </div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+*~
+/secret_key
+/database_name
+/till_name
+*.pyc
+__pycache__
+/static/
+/tillweb.pid
+/db.sqlite3
+/uwsgi.log
