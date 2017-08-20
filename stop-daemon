@@ -8,4 +8,5 @@ pidfile=${DIR}/tillweb.pid
 
 cd "${DIR}"
 
-test -f ${pidfile} && uwsgi --stop ${pidfile} || echo "No daemon was running"
+test -f ${pidfile} && /sbin/start-stop-daemon --stop --signal=INT --pidfile=${pidfile} --retry 10 --oknodo || echo "No daemon was running"
+rm -f ${pidfile}
