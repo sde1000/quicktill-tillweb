@@ -106,20 +106,24 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static-dist"),
 ]
 
+# Till database access
 
-# Access to till database
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from .settings_database import *
 
-with open(os.path.join(BASE_DIR, "database_name")) as f:
-    TILLWEB_DATABASE_NAME = f.readline().strip()
-
-TILLWEB_SINGLE_SITE = True
-TILLWEB_DATABASE = sessionmaker(
-    bind=create_engine(
-        'postgresql+psycopg2:///{}'.format(TILLWEB_DATABASE_NAME),
-        pool_size=32, pool_recycle=600))
-with open(os.path.join(BASE_DIR, "till_name")) as f:
-    TILLWEB_PUBNAME = f.readline().strip()
-TILLWEB_LOGIN_REQUIRED = False
-TILLWEB_DEFAULT_ACCESS = "R"
+# Logging - when running testserver, output SQL queries and responses
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'sqlalchemy.engine': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}
