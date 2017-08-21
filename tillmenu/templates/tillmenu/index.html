@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Menus{% endblock %}
+{% block heading %}Menus{% endblock %}
+
+{% block content %}
+
+{% if menus %}
+<p>Available menus:</p>
+<ul>
+  {% for m in menus %}
+  <li><a href="{{m.get_absolute_url}}">{{m.name}}</a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There are no menus defined.</p>
+{% endif %}
+
+<p>Add a new menu:</p>
+
+<form action="" method="post">{% csrf_token %}
+  {{form.as_p}}
+  <input type="submit" name="addmenu" value="Add new menu" />
+</form>
+
+{% endblock %}

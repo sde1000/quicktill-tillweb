@@ -22,6 +22,7 @@ admin.autodiscover()
 admin.site.site_header = "Till administration"
 
 import quicktill.tillweb.urls
+import tillmenu.urls
 
 urlpatterns = [
     url(r'^accounts/', include([
@@ -33,6 +34,7 @@ urlpatterns = [
         url(r'^users/(?P<userid>\d+)/$', views.userdetail, name="userdetail"),
     ])),
     url(r'^admin/', admin.site.urls),
+    url(r'^tillmenu/', include(tillmenu.urls)),
     url(r'^detail/', include(quicktill.tillweb.urls.tillurls),
         {"pubname": "detail"}),
     url(r'^$', views.index, name="frontpage"),
