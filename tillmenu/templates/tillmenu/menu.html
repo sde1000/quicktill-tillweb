@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Menu: {{menu.name}}{% endblock %}
+{% block heading %}Menu: {{menu.name}}{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+  function disable_install() {
+  document.getElementById('activate').disabled = true;
+  document.getElementById('validmenu').style.display = 'none';
+  }
+</script>
+
+<form action="" method="post">{% csrf_token %}
+  <table>
+    {{form.as_table}}
+  </table>
+  <input type="submit" name="save" value="Save menu" />
+
+{% if error %}
+  <p class="error">Error parsing the menu: {{error}}</p>
+  <p>Update and re-save to check again.</p>
+  {% else %}
+  <div id="validmenu">
+    <p>The menu is valid.  The menu file for the till is:</p>
+    <p>{{output}}</p>
+    <input type="submit" id="activate" name="activate" value="Install this menu on the till" />
+  </div>
+{% endif %}
+</form>
+
+<p>If you aren't going to use this menu any more, you can delete it.</p>
+
+<form action="" method="post">{% csrf_token %}
+  <input type="submit" name="delete" value="Delete menu" />
+</form>
+
+<p><a href="{% url "tillmenu-index" %}">Back to list of menus</a></p>
+{% endblock %}

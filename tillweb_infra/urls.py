@@ -17,9 +17,11 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 import quicktill.tillweb.urls
+import tillmenu.urls
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^tillmenu/', include(tillmenu.urls)),
     url(r'^', include(quicktill.tillweb.urls.tillurls),
         {"pubname": ""}),
 ]
