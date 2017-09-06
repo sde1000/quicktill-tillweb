@@ -106,6 +106,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static-dist"),
 ]
 
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda o: "/accounts/users/%d/" % o.id,
+}
+
 # Till database access
 
 from .settings_database import *

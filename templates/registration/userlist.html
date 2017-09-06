@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Till web users{% endblock %}
+
+{% block heading %}Till web users{% endblock %}
+
+{% block content %}
+
+<h2>Current users</h2>
+
+<table class="userlist">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>First name</th>
+      <th>Last name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr>
+      <td><a href="{{u.get_absolute_url}}">{{u}}</a></td>
+      <td>{{u.first_name}}</td>
+      <td>{{u.last_name}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Add new user</h2>
+
+<form method="post" action="">
+{% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="Add new user" />
+</form>
+
+<p><a href="/">Back to till</a></p>
+
+{% endblock %}
