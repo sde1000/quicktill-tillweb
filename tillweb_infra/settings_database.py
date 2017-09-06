@@ -22,6 +22,6 @@ TILLWEB_DATABASE = sessionmaker(
         pool_size=32, pool_recycle=600))
 with open(os.path.join(base_dir, "till_name")) as f:
     TILLWEB_PUBNAME = f.readline().strip()
-TILLWEB_LOGIN_REQUIRED = False
+TILLWEB_LOGIN_REQUIRED = True
 TILLWEB_DEFAULT_ACCESS = "R"
 

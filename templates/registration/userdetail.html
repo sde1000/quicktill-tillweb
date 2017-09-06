@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Till web user — {{object.get_full_name}}{% endblock %}
+
+{% block heading %}Till web user — {{object.get_full_name}}{% endblock %}
+
+{% block content %}
+
+<form method="post" action="">
+{% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <fieldset {% if object.is_staff or object.is_superuser%} disabled {% endif %}>
+    <input type="submit" name="update" value="Update" />
+    <input type="submit" name="delete" value="Delete" />
+  </fieldset>
+</form>
+
+<p><a href="{% url "userlist" %}">Back to user list</a></p>
+
+{% endblock %}

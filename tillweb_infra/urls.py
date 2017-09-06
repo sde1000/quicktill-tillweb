@@ -15,11 +15,24 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+import django.contrib.auth.views
+from tillweb_infra import views
+
+admin.autodiscover()
+admin.site.site_header = "Till administration"
 
 import quicktill.tillweb.urls
 import tillmenu.urls
 
 urlpatterns = [
+    url(r'^accounts/', include([
+        url(r'^login/$', django.contrib.auth.views.login, name="login-page"),
+        url(r'^logout/$', django.contrib.auth.views.logout, name="logout-page"),
+        url(r'^profile/$', views.userprofile, name="user-profile-page"),
+        url(r'^change-password/$', views.pwchange, name="password-change-page"),
+        url(r'^users/$', views.users, name="userlist"),
+        url(r'^users/(?P<userid>\d+)/$', views.userdetail, name="userdetail"),
+    ])),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tillmenu/', include(tillmenu.urls)),
     url(r'^', include(quicktill.tillweb.urls.tillurls),

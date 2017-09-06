@@ -27,12 +27,12 @@ a:link {color:#09c;}
 a:visited {color:#07a;}
 a:hover {color:#e00;}
 
-#Header {
-    padding:10px 20px;
-    border-style:solid;
-    border-color:black;
-    border-width:0px 0px 1px 0px;
-    background-color:#eee;
+header {
+    padding: 10px 20px;
+    border-style: solid;
+    border-color: black;
+    border-width: 0px 0px 1px 0px;
+    background-color: #eee;
     font-size: 25px;
 }
 
@@ -69,6 +69,19 @@ a:hover {color:#e00;}
     padding: 0;
     list-style: none;
     width: 100px;
+}
+
+form table th { text-align: right; }
+form table td + td { text-align: left; }
+form ul.errorlist {
+    color: red;
+    list-style: none;
+}
+form fieldset { border: none; }
+
+table.userlist {
+    border: solid;
+    border-width: 1px;
 }
 
 /* Define your currency symbol here! */
