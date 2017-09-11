@@ -6,6 +6,7 @@
 # contents of this file.
 
 import os
+from django.core.urlresolvers import reverse
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -19,7 +20,8 @@ TILLWEB_SINGLE_SITE = True
 TILLWEB_DATABASE = sessionmaker(
     bind=create_engine(
         'postgresql+psycopg2:///{}'.format(TILLWEB_DATABASE_NAME),
-        pool_size=32, pool_recycle=600))
+        pool_size=32, pool_recycle=600),
+    info={'pubname': '', 'reverse': reverse})
 with open(os.path.join(base_dir, "till_name")) as f:
     TILLWEB_PUBNAME = f.readline().strip()
 TILLWEB_LOGIN_REQUIRED = True
