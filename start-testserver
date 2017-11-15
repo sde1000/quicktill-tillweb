@@ -9,4 +9,5 @@ cd "${DIR}"
 export DJANGO_SETTINGS_MODULE=tillweb_infra.settings
 export LANG=en_GB.UTF8
 export LC_CTYPE=en_GB.UTF8
+python3 -Wd manage.py migrate
 exec python3 -Wd manage.py runserver
