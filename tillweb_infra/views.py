@@ -5,7 +5,14 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Permission
 from django.db import IntegrityError
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+
+# They moved it again!  As of django-1.10 reverse is found in
+# django.urls, but we need to retain compatibility with django-1.8
+# while we are still targetting Ubuntu-16.04 LTS.
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 @login_required
 def userprofile(request):
