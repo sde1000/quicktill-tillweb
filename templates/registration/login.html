@@ -7,7 +7,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<p><strong>Note:</strong> You are already logged in as {{user.get_full_name}}.  <a href="/">Click here to go to the index page.</a></p>
+<p><strong>Note:</strong> You are already logged in as {{user.get_full_name}}.  <a href="{% url "tillweb-pubroot" %}">Click here to go to the index page.</a></p>
 {% endif %}
 
 <form method="post" action="{% url "login-page" %}">
@@ -16,5 +16,7 @@
 <input type="submit" value="Log in" />
 <input type="hidden" name="next" value="{{ next|escape }}" />
 </form>
+
+<p><a href="{% url "frontpage" %}">Back to front page</a></p>
 
 {% endblock %}

@@ -5,8 +5,12 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Permission
 from django.db import IntegrityError
 from django.contrib import messages
+from django.conf import settings
 
 from django.urls import reverse
+
+def index(request):
+    return render(request, "index.html", {'pubname': settings.TILLWEB_PUBNAME})
 
 @login_required
 def userprofile(request):

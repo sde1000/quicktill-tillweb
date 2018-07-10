@@ -8,7 +8,7 @@
 <p>You are logged in as {{user.get_full_name}}.</p>
 
 <ul>
-  <li><a href="/">Go to the till</a></li>
+  <li><a href="{% url "tillweb-pubroot" %}">Go to the till</a></li>
   <li><a href="{% url "password-change-page" %}">Change your password</a></li>
   {% if may_edit_users %}
   <li><a href="{% url "userlist" %}">Add or remove users</a></li>

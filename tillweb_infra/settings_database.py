@@ -7,13 +7,7 @@
 
 import os
 
-# They moved it again!  As of django-1.10 reverse is found in
-# django.urls, but we need to retain compatibility with django-1.8
-# while we are still targetting Ubuntu-16.04 LTS.
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -28,9 +22,8 @@ TILLWEB_DATABASE = sessionmaker(
     bind=create_engine(
         'postgresql+psycopg2:///{}'.format(TILLWEB_DATABASE_NAME),
         pool_size=32, pool_recycle=600),
-    info={'pubname': '', 'reverse': reverse})
+    info={'pubname': 'detail', 'reverse': reverse})
 with open(os.path.join(base_dir, "till_name")) as f:
     TILLWEB_PUBNAME = f.readline().strip()
 TILLWEB_LOGIN_REQUIRED = True
 TILLWEB_DEFAULT_ACCESS = "R"
-
