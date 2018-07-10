@@ -32,7 +32,7 @@ urlpatterns = [
         url(r'^users/$', views.users, name="userlist"),
         url(r'^users/(?P<userid>\d+)/$', views.userdetail, name="userdetail"),
     ])),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include(quicktill.tillweb.urls.tillurls),
-        {"pubname": ""}),
+    url(r'^admin/', admin.site.urls),
+    url(r'^detail/', include(quicktill.tillweb.urls.tillurls),
+        {"pubname": "detail"}),
 ]

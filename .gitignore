@@ -8,3 +8,4 @@ __pycache__
 /tillweb.pid
 /db.sqlite3
 /uwsgi.log
+/venv/
