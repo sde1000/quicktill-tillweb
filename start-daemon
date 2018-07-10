@@ -16,7 +16,8 @@ mkdir -p "${DIR}/static"
 python3 manage.py collectstatic --noinput
 python3 manage.py migrate
 exec uwsgi \
-     --plugins python35 \
+     --plugins python36 \
+     --virtualenv ${DIR}/venv \
      --socket 127.0.0.1:3861 \
      --wsgi-file tillweb_infra/wsgi.py \
      --lazy-apps \
