@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 default_menu = """# Any line starting with '#' is ignored
 # Blank lines are also ignored
