@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-import django.contrib.auth.views
+from django.contrib.auth import views as auth_views
 from tillweb_infra import views
 
 admin.autodiscover()
@@ -25,8 +25,8 @@ import quicktill.tillweb.urls
 
 urlpatterns = [
     url(r'^accounts/', include([
-        url(r'^login/$', django.contrib.auth.views.login, name="login-page"),
-        url(r'^logout/$', django.contrib.auth.views.logout, name="logout-page"),
+        url(r'^login/$', auth_views.LoginView.as_view(), name="login-page"),
+        url(r'^logout/$', auth_views.LogoutView.as_view(), name="logout-page"),
         url(r'^profile/$', views.userprofile, name="user-profile-page"),
         url(r'^change-password/$', views.pwchange, name="password-change-page"),
         url(r'^users/$', views.users, name="userlist"),
