@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}The Robot Arms{% endblock %}
+{% block heading %}The Robot Arms{% endblock %}
+{% block content %}
+<p><a href="https://www.emfcamp.org/volunteer/">The Robot Arms is run
+entirely by volunteers!  Want to help out?  Follow this link!</a></p>
+
+<h1>What's on sale right now?</h1>
+
+{% if lines %}
+<table>
+  <thead>
+    <tr><th>Line</th><th>Drink</th><th>Price</th></tr>
+  </thead>
+  <tbody>
+    {% for line, drink, price in lines %}
+    <tr><td>{{line}}</td><td>{{drink}}</td><td>£{{price}}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Nothing!</p>
+{% endif %}
+
+
+<h1>How much is left in stock?</h1>
+
+{% if stock %}
+<table>
+  <thead>
+    <tr><th>Drink</th><th>Quantity</th></tr>
+  </thead>
+  <tbody>
+    {% for drink, qty, unit in stock %}
+    <tr><td>{{drink}}</td><td>{{qty}} {{unit}}s</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Nothing!</p>
+{% endif %}
+
+
+<h1>What's powering this?</h1>
+
+<p>The tills are run using free software.</p>
+<ul>
+  <li><a href="https://github.com/sde1000/quicktill">The till software</a></li>
+  <li><a href="https://github.com/sde1000/tillweb">This web service ("emf" branch)</a></li>
+  <li><a href="https://www.screenly.io/ose/">The display boards</a> fetch web pages like <a href="/display/on-tap.html">https://bar.emfcamp.org/display/on-tap.html</a></li>
+</ul>
+
+<p>Pull requests welcome!  If you improve the web service, your
+changes may be made live during EMF!</p>
+
+<p>A simple JSON interface is available:</p>
+<ul>
+  <li><a href="http://bar.emfcamp.org/locations.json">http://bar.emfcamp.org/locations.json</a>
+  lists the groups of stock that are on sale at the moment</li>
+  <li>http://bar.emfcamp.org/location/[name].json lists stock on sale in a
+  location.</li>
+  <li><a href="http://bar.emfcamp.org/stock.json">http://bar.emfcamp.org/stock.json</a> lists everything we have left in stock.</li>
+</ul>
+
+{% endblock %}

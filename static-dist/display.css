@@ -1,0 +1,20 @@
+/* -*- coding: utf-8 -*- */
+
+@charset "UTF-8";
+
+body {
+    margin:0px;
+    padding:0px;
+    font-family: helvetica, sans-serif;
+    font-size: 20px;
+    color:#fff;
+    background-color:black;
+    width: 100%;
+    text-align: center;
+}
+
+header {
+    font-family: helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+}

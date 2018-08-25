@@ -35,6 +35,10 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^detail/', include(quicktill.tillweb.urls.tillurls),
         {"pubname": "detail"}),
-    url(r'^$', views.index, name="frontpage"),
+    url(r'^$', views.frontpage, name="home"),
+    url(r'^locations.json$', views.locations),
+    url(r'^location/(?P<location>[\w\- ]+).json$', views.location),
+    url(r'^stock.json$', views.stock),
     url(r'^refusals/$', views.refusals, name="refusals"),
+    url(r'^display/on-tap.html$', views.display_on_tap, name="display-on-tap"),
 ]

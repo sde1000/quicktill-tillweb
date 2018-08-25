@@ -1,15 +1,16 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import JsonResponse
 from django import forms
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User as authUser
+from django.contrib.auth.models import Permission as authPermission
 from django.db import IntegrityError
 from django.contrib import messages
 from django.conf import settings
 
 from django.urls import reverse
 
-from quicktill.models import *
 from quicktill.version import version
 
 from sqlalchemy.exc import OperationalError
@@ -18,6 +19,7 @@ from sqlalchemy.orm import joinedload, joinedload_all
 from sqlalchemy.orm import lazyload
 from sqlalchemy.orm import defaultload
 from sqlalchemy.orm import undefer, defer, undefer_group
+from sqlalchemy import distinct
 
 def index(request):
     return render(request, "index.html", {'pubname': settings.TILLWEB_PUBNAME})
@@ -96,14 +98,14 @@ class UserForm(forms.Form):
 
 @permission_required("auth.add_user")
 def users(request):
-    u = User.objects.all()
+    u = authUser.objects.all()
 
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             try:
-                user = User.objects.create_user(
+                user = authUser.objects.create_user(
                     cd['username'],
                     password=cd['newpassword'] if cd['newpassword'] else None)
                 if not cd['newpassword']:
@@ -112,7 +114,7 @@ def users(request):
                 user.first_name = cd['firstname']
                 user.last_name = cd['lastname']
                 if cd['privileged']:
-                    permission = Permission.objects.get(codename="add_user")
+                    permission = authPermission.objects.get(codename="add_user")
                     user.user_permissions.add(permission)
                 user.save()
                 messages.info(
@@ -129,8 +131,8 @@ def users(request):
 @permission_required("auth.add_user")
 def userdetail(request, userid):
     try:
-        u = User.objects.get(id=int(userid))
-    except User.DoesNotExist:
+        u = authUser.objects.get(id=int(userid))
+    except authUser.DoesNotExist:
         raise Http404
 
     if request.method == 'POST' and (u.is_staff or u.is_superuser):
@@ -157,10 +159,10 @@ def userdetail(request, userid):
                 if cd['newpassword']:
                     u.set_password(cd['newpassword'])
                 if cd['privileged'] and not u.has_perm("auth.add_user"):
-                    permission = Permission.objects.get(codename="add_user")
+                    permission = authPermission.objects.get(codename="add_user")
                     u.user_permissions.add(permission)
                 if not cd['privileged'] and u.has_perm("auth.add_user"):
-                    permission = Permission.objects.get(codename="add_user")
+                    permission = authPermission.objects.get(codename="add_user")
                     u.user_permissions.remove(permission)
                 u.save()
                 messages.info(request, "User details updated")
@@ -184,6 +186,8 @@ def userdetail(request, userid):
 
     return render(request, 'registration/userdetail.html',
                   {'object': u, 'form': form})
+
+from quicktill.models import *
 
 # XXX HACK
 
@@ -238,11 +242,84 @@ def tillweb_view(view):
     return new_view
 
 @login_required
-@tillweb_view
-def refusals(request, info, session):
-    r = session.query(RefusalsLog)\
-               .options(joinedload('user'))\
-               .order_by(RefusalsLog.id)\
-               .all()
-    return ('refusals.html',
-            {'refusals': r})
+def refusals(request):
+    s = settings.TILLWEB_DATABASE()
+    r = s.query(RefusalsLog)\
+         .options(joinedload('user'))\
+         .order_by(RefusalsLog.id)\
+         .all()
+    return render(request, 'refusals.html',
+                  context={'refusals': r,
+                           'dtf': dtf,
+                  })
+
+def display_on_tap(request):
+    s = settings.TILLWEB_DATABASE()
+    # We want everything in location "Bar"
+    r = s.query(StockLine)\
+         .filter(StockLine.location == "Bar")\
+         .order_by(StockLine.name)\
+         .all()
+
+    return render(request, 'display_on_tap.html',
+                  context={'lines': r})
+
+def frontpage(request):
+    s = settings.TILLWEB_DATABASE()
+    pub = settings.TILLWEB_PUBNAME
+    lines = s.query(StockLine)\
+             .order_by(StockLine.name)\
+             .all()
+
+    stock = s.query(StockType)\
+            .filter(StockType.remaining > 0)\
+            .order_by(StockType.dept_id)\
+            .order_by(StockType.manufacturer)\
+            .order_by(StockType.name)\
+            .all()
+            
+    return render(request, "whatson.html",
+                  {"pubname": pub,
+                   "lines": [
+                       (l.name, l.sale_stocktype.format(),
+                        l.sale_stocktype.pricestr)
+                       for l in lines
+                       if l.stockonsale or l.linetype == 'continuous'],
+                   "stock": [(s.format(), s.remaining, s.unit.name)
+                             for s in stock],
+                  })
+
+def locations(request):
+    s = settings.TILLWEB_DATABASE()
+    locations = [x[0] for x in s.query(distinct(StockLine.location))
+                 .order_by(StockLine.location).all()]
+    return JsonResponse({'locations': locations})
+
+def location(request, location):
+    s = settings.TILLWEB_DATABASE()
+    lines = s.query(StockLine)\
+             .filter(StockLine.location == location)\
+             .order_by(StockLine.name)\
+             .all()
+
+    return JsonResponse({'location': [
+        {"line": l.name,
+         "description": l.sale_stocktype.format(),
+         "price": l.sale_stocktype.saleprice,
+         "price_for_units": l.sale_stocktype.saleprice_units,
+         "unit": l.sale_stocktype.unit.name}
+        for l in lines if l.stockonsale or l.linetype == "continuous"]})
+
+def stock(request):
+    s = settings.TILLWEB_DATABASE()
+    stock = s.query(StockType)\
+             .filter(StockType.remaining > 0)\
+             .order_by(StockType.dept_id)\
+             .order_by(StockType.manufacturer)\
+             .order_by(StockType.name)\
+             .all()
+    return JsonResponse({'stock': [{
+        'description': s.format(),
+        'remaining': s.remaining,
+        'unit': s.unit.name
+        } for s in stock]})
