@@ -36,4 +36,5 @@ urlpatterns = [
     url(r'^detail/', include(quicktill.tillweb.urls.tillurls),
         {"pubname": "detail"}),
     url(r'^$', views.index, name="frontpage"),
+    url(r'^refusals/$', views.refusals, name="refusals"),
 ]
