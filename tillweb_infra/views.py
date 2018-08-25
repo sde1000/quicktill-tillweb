@@ -264,6 +264,21 @@ def display_on_tap(request):
     return render(request, 'display_on_tap.html',
                   context={'lines': r})
 
+def display_cans_and_bottles(request):
+    s = settings.TILLWEB_DATABASE()
+    # We want all stocktypes with unit 'can' or unit 'bottle', but only
+    # if there are >0 qty remaining
+    r = s.query(StockType)\
+        .filter(StockType.unit_id.in_(['can', 'bottle']))\
+        .filter(StockType.remaining > 0.0)\
+        .filter(StockType.abv != None)\
+        .options(undefer('remaining'))\
+        .order_by(StockType.manufacturer, StockType.name)\
+        .all()
+
+    return render(request, 'display_cans_and_bottles.html',
+                  context={'types': r})
+
 def frontpage(request):
     s = settings.TILLWEB_DATABASE()
     pub = settings.TILLWEB_PUBNAME

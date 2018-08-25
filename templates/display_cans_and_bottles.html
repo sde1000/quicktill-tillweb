@@ -1,0 +1,26 @@
+{% extends "display.html" %}
+
+{% block title %}Cans and Bottles{% endblock %}
+
+{% block header %}Cans and Bottles{% endblock %}
+
+{% block content %}
+
+<table>
+  <thead>
+    <tr><th>Manufacturer</th><th>Name</th><th>ABV</th><th>Price</th><th>Remaining</th></tr>
+  </thead>
+  <tbody>
+    {% for t in types %}
+    <tr>
+      <td>{{t.manufacturer}}</td>
+      <td>{{t.name}}</td>
+      <td>{{t.abv}}%</td>
+      <td>£{{t.saleprice}}/{{t.unit.name}}</td>
+      <td>{{t.remaining}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

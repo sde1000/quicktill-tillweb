@@ -41,4 +41,6 @@ urlpatterns = [
     url(r'^stock.json$', views.stock),
     url(r'^refusals/$', views.refusals, name="refusals"),
     url(r'^display/on-tap.html$', views.display_on_tap, name="display-on-tap"),
+    url(r'^display/cans-and-bottles.html$', views.display_cans_and_bottles,
+        name="display-cans-and-bottles"),
 ]
