@@ -36,12 +36,32 @@ header div h1 {
 	font-size: 2.5em;
 }
 
+header div div.status {
+	position: absolute;
+	top: 15pt;
+	right: 30pt;
+}
+
+header div div.status h2 {
+	background: white;
+	color: black;
+	border-radius: 0.25em;
+	padding: .25em .5em;
+}
+
+.status.closed h2 {
+	background-color: #C70039;
+}
+
+.status.open h2 {
+	background-color: #33FF80;
+}
+
 p.alert-block {
 	border: 1px solid #5f1539;
 	border-radius: .25em;
 	background: rgb(95, 21, 57, 0.5);
 	padding: 1em;
-
 }
 
 a:link, a:visited, a:hover {

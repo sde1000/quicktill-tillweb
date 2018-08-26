@@ -1,7 +1,24 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block title %}The Robot Arms{% endblock %}
-{% block heading %}The Robot Arms{% endblock %}
+{% block heading %}
+    <h1>The Robot Arms</h1>
+    {% if info.open %}
+        <div class="status open">
+            <h2>OPEN</h2>
+            <p>Closing at {{ info.closes_at|date:"H:i" }}</p>
+        </h2>
+        {% else %}
+            <div class="status closed">
+                <h2>CLOSED</h2>
+                {% if info.next_open %}
+                    <p>Opening at {{ info.next_open|date:"H:i" }}</p>
+                {% else %}
+                    <p>Thats a wrap!</p>
+                {% endif %}
+            </div>
+        {% endif %}
+{% endblock %}
 {% block content %}
 <p class="alert-block"><a href="https://www.emfcamp.org/volunteer/">The Robot Arms is run
 entirely by volunteers!  Want to help out?  Follow this link!</a></p>
