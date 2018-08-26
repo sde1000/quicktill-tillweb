@@ -288,7 +288,7 @@ def display_cans_and_bottles(request):
         .all()
 
     return render(request, 'display-cans-and-bottles.html',
-                  context={'lines': r})
+                  context={'types': r})
 
 def frontpage(request):
     s = settings.TILLWEB_DATABASE()
