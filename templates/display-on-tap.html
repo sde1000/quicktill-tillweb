@@ -21,22 +21,18 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for l in lines %}
-				{% if l.sale_stocktype %}
-				<tr>
-					<td>{{ l.sale_stocktype }}</td>
-					<td>{{ l.sale_stocktype.abv }}%</td>
-					<td>£{{ l.sale_stocktype.saleprice }}/{{ l.sale_stocktype.unit.name }}</td>
-					{% if l.remaining < 24.0 %}
-						<td>Last few</td>
-					{% elif l.remaining < 100.0 %}
-						<td>Low</td>
-					{% else %}
-						<td>Plenty</td>
-					{% endif %}
-				</tr>
-				{% endif %}
-			{% endfor %}
+		  <tr><th>Real Ales</th><td></td><td></td><td></td></tr>
+		  {% with ales as lines %}
+		  {% include "ontap-lines.html" %}
+		  {% endwith %}
+		  <tr><th>Keg taps</th><td></td><td></td><td></td></tr>
+		  {% with kegs as lines %}
+		  {% include "ontap-lines.html" %}
+		  {% endwith %}
+		  <tr><th>Ciders</th><td></td><td></td><td></td></tr>
+		  {% with ciders as lines %}
+		  {% include "ontap-lines.html" %}
+		  {% endwith %}
 		</tbody>
 	</table>
 {% endblock %}

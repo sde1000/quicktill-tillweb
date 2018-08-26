@@ -18,6 +18,7 @@ from sqlalchemy.orm import subqueryload, subqueryload_all
 from sqlalchemy.orm import joinedload, joinedload_all
 from sqlalchemy.orm import lazyload
 from sqlalchemy.orm import defaultload
+from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import undefer, defer, undefer_group
 from sqlalchemy import distinct
 
@@ -255,14 +256,24 @@ def refusals(request):
 
 def display_on_tap(request):
     s = settings.TILLWEB_DATABASE()
-    # We want everything in location "Bar"
-    r = s.query(StockLine)\
-         .filter(StockLine.location == "Bar")\
-         .order_by(StockLine.name)\
-         .all()
+
+    base = s.query(StockItem, StockItem.remaining / StockUnit.size)\
+            .join('stocktype')\
+            .join('stockline')\
+            .join('stockunit')\
+            .filter(StockLine.location == "Bar")\
+            .order_by(StockType.manufacturer, StockType.name)\
+            .options(undefer('remaining'))\
+            .options(contains_eager('stocktype'))
+
+    ales = base.filter(StockType.dept_id == 1).all()
+
+    kegs = base.filter(StockType.dept_id.in_([2, 13])).all()
+
+    ciders = base.filter(StockType.dept_id == 3).all()
 
     return render(request, 'display-on-tap.html',
-                  context={'lines': r})
+                  context={'ales': ales, 'kegs': kegs, 'ciders': ciders})
 
 def display_cans_and_bottles(request):
     s = settings.TILLWEB_DATABASE()
