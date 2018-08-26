@@ -13,7 +13,7 @@
   <body>
     <header>
         <div>
-            <h1>{% block heading %}Heading{% endblock %}</h1>
+            {% block heading %}Heading{% endblock %}
             {% if is_paginated %} — page {{ page }} of {{ pages }}{% endif %}
         </div>
     </header>
