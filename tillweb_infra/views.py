@@ -32,16 +32,14 @@ class EventInfo:
 
         self.length = datetime.timedelta()
         self.total_consumption = 0.0
-        for start, end, weight in settings.EVENT_TIMES:
-            self.length += (end - start)
-            self.total_consumption += weight
-
         self.time_passed = datetime.timedelta()
         self.expected_consumption = 0.0
         self.open = False
         self.next_open = None
         self.closes_at = None
         for start, end, weight in settings.EVENT_TIMES:
+            self.length += (end - start)
+            self.total_consumption += weight
             if self.now >= end:
                 # This segment has passed.
                 self.time_passed += (end - start)
