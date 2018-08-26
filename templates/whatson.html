@@ -6,6 +6,17 @@
 <p><a href="https://www.emfcamp.org/volunteer/">The Robot Arms is run
 entirely by volunteers!  Want to help out?  Follow this link!</a></p>
 
+<h1>Event progress</h1>
+
+<p>Based on current time of {{info.now}}</p>
+<p>Bar is currently {% if info.open %}open{% else %}closed{% endif %}.</p>
+{% if info.open %}
+<p>Bar closes at {{info.closes_at}}.</p>
+{% endif %}
+<p>Bar next opens at {{info.next_open}}.</p>
+<p>We have been open for {{info.time_passed}} out of {{info.length}}.  That's {{info.completed_pct}}%.</p>
+<p>We should have consumed {{info.expected_consumption}} out of {{info.total_consumption}} booze.  That's {{info.expected_consumption_pct}}%.</p>
+
 <h1>What's on sale right now?</h1>
 
 {% if lines %}

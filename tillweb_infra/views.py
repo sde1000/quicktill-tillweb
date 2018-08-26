@@ -22,6 +22,46 @@ from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import undefer, defer, undefer_group
 from sqlalchemy import distinct
 
+import datetime
+
+class EventInfo:
+    def __init__(self, override_time=None):
+        # Work out how far through the event we are, based on the current
+        # time or on the supplied time.
+        self.now = override_time or datetime.datetime.now()
+
+        self.length = datetime.timedelta()
+        self.total_consumption = 0.0
+        for start, end, weight in settings.EVENT_TIMES:
+            self.length += (end - start)
+            self.total_consumption += weight
+
+        self.time_passed = datetime.timedelta()
+        self.expected_consumption = 0.0
+        self.open = False
+        self.next_open = None
+        self.closes_at = None
+        for start, end, weight in settings.EVENT_TIMES:
+            if self.now >= end:
+                # This segment has passed.
+                self.time_passed += (end - start)
+                self.expected_consumption += weight
+            elif self.now >= start and self.now < end:
+                # We are in this segment.
+                self.open = True
+                self.closes_at = end
+                self.time_passed += (self.now - start)
+                self.expected_consumption += weight * (
+                    (self.now - start) / (end - start))
+            elif self.now < start and not self.next_open:
+                self.next_open = start
+        self.completed_fraction = self.time_passed / self.length
+        self.completed_pct = self.completed_fraction * 100.0
+        self.expected_consumption_fraction = self.expected_consumption \
+                                             / self.total_consumption
+        self.expected_consumption_pct = self.expected_consumption_fraction \
+                                        * 100.0
+
 def index(request):
     return render(request, "index.html", {'pubname': settings.TILLWEB_PUBNAME})
 
@@ -256,6 +296,11 @@ def frontpage(request):
             .order_by(StockType.name)\
             .all()
 
+    # Testing:
+    info = EventInfo(datetime.datetime(2018, 9, 1, 11, 30))
+    # Production:
+    #info = EventInfo()
+
     return render(request, "whatson.html",
                   {"pubname": pub,
                    "lines": [
@@ -265,6 +310,7 @@ def frontpage(request):
                        if l.stockonsale or l.linetype == 'continuous'],
                    "stock": [(s.format(), s.remaining, s.unit.name)
                              for s in stock],
+                   "info": info,
                   })
 
 def locations(request):
@@ -301,3 +347,4 @@ def stock(request):
         'remaining': s.remaining,
         'unit': s.unit.name
         } for s in stock]})
+
