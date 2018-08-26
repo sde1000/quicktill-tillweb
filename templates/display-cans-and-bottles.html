@@ -22,19 +22,19 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for l in lines %}
+		{% for t in types %}
 			<tr>
-				<td>{{l.manufacturer}} {{l.name}}</td>
-				<td>{{l.abv}}%</td>
-				<td>£{{ l.saleprice }}/{{ l.unit.name }}</td>
-				{% if l.remaining < 24.0 %}
+				<td>{{ t.manufacturer }} {{ t.name }}</td>
+				<td>{{ t.abv }}%</td>
+				<td>£{{ t.saleprice }}/{{ t.unit.name }}</td>
+				{% if t.remaining < 5.0 %}
 					<td>Last few</td>
-				{% elif l.remaining < 100.0 %}
+				{% elif t.remaining < 24.0 %}
 					<td>Low</td>
 				{% else %}
 					<td>Plenty</td>
 				{% endif %}
-				<!-- <td>{{l.remaining|stringformat:"d"}}</td> -->
+				<!-- <td>{{ t.remaining|stringformat:"d" }}</td> -->
 			</tr>
 		{% endfor %}
 	</tbody>
