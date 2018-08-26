@@ -341,7 +341,7 @@ def frontpage(request):
                   {"info": info,
                    "alcohol_used": alcohol_used,
                    "total_alcohol": total_alcohol,
-                   "alcohol_used_pct": (alcohol_used / total_alcohol) * 100.0,
+                   "alcohol_used_pct": (alcohol_used / total_alcohol) * 100,
                    "ales": ales,
                    "kegs": kegs,
                    "ciders": ciders,
@@ -390,5 +390,5 @@ def progress_json(request):
     return JsonResponse(
         {'licensed_time_pct': info.completed_pct,
          'expected_consumption_pct': info.expected_consumption_pct,
-         'actual_consumption_pct': (alcohol_used / total_alcohol) * 100.0,
+         'actual_consumption_pct': (alcohol_used / total_alcohol) * 100,
         })
