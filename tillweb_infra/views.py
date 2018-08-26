@@ -277,7 +277,7 @@ def display_cans_and_bottles(request):
         .all()
 
     return render(request, 'display-cans-and-bottles.html',
-                  context={'types': r})
+                  context={'lines': r})
 
 def frontpage(request):
     s = settings.TILLWEB_DATABASE()
@@ -292,7 +292,7 @@ def frontpage(request):
             .order_by(StockType.manufacturer)\
             .order_by(StockType.name)\
             .all()
-            
+
     return render(request, "whatson.html",
                   {"pubname": pub,
                    "lines": [

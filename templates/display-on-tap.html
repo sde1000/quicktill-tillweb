@@ -8,29 +8,34 @@
 	<table>
 		<colgroup>
 			<col width="50%" />
-			<col width="25%" />
-			<col width="25%" />
+			<col width="16.66%" />
+			<col width="16.66%" />
+			<col width="16.66%" />
 		</colgroup>
 		<thead>
 			<tr>
 				<th>Name</th>
 				<th>ABV</th>
 				<th>Price</th>
+				<th>Stock status</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for l in lines %}
-			    {% if l.sale_stocktype %}
+				{% if l.sale_stocktype %}
 				<tr>
-					<td>{{l.sale_stocktype}}</td>
-					{% if l.sale_stocktype.abv %}
-						<td>{{l.sale_stocktype.abv}}%</td>
+					<td>{{ l.sale_stocktype }}</td>
+					<td>{{ l.sale_stocktype.abv }}%</td>
+					<td>£{{ l.sale_stocktype.saleprice }}/{{ l.sale_stocktype.unit.name }}</td>
+					{% if l.remaining < 24.0 %}
+						<td>Last few</td>
+					{% elif l.remaining < 100.0 %}
+						<td>Low</td>
 					{% else %}
-						<td>&mdash;</td>
+						<td>Plenty</td>
 					{% endif %}
-					<td>£{{l.sale_stocktype.saleprice}}/{{l.sale_stocktype.unit.name}}</td>
 				</tr>
-			    {% endif %}
+				{% endif %}
 			{% endfor %}
 		</tbody>
 	</table>
