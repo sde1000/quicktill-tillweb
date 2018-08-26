@@ -261,7 +261,7 @@ def display_on_tap(request):
          .order_by(StockLine.name)\
          .all()
 
-    return render(request, 'display_on_tap.html',
+    return render(request, 'display-on-tap.html',
                   context={'lines': r})
 
 def display_cans_and_bottles(request):
@@ -276,7 +276,7 @@ def display_cans_and_bottles(request):
         .order_by(StockType.manufacturer, StockType.name)\
         .all()
 
-    return render(request, 'display_cans_and_bottles.html',
+    return render(request, 'display-cans-and-bottles.html',
                   context={'types': r})
 
 def frontpage(request):
