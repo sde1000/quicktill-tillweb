@@ -57,16 +57,18 @@ class EventInfo:
                 self.next_open = start
         self.completed_fraction = self.time_passed / self.length
         self.completed_pct = self.completed_fraction * 100.0
+        self.completed_pct_remainder = 100.0 - self.completed_pct
         self.expected_consumption_fraction = self.expected_consumption \
                                              / self.total_consumption
         self.expected_consumption_pct = self.expected_consumption_fraction \
                                         * 100.0
+        self.expected_consumption_pct_remainder = 100.0 - self.expected_consumption_pct
 
 def booziness(s):
     """How much booze have we used?
 
     Pass in an ORM session.  Returns tuple of amount of alcohol used
-    and total amount of alcohol.
+    and total amount of alcohol as Decimal, and percentage used as float
     """
 
     used_fraction = case([(StockItem.finished != None, 1.0)],
@@ -81,13 +83,15 @@ def booziness(s):
                         (StockUnit.unit_id == 'bottle', 330.0),
                         ], else_=1.0) * StockUnit.size * StockType.abv / 100.0
 
-    return s.query(func.sum(used_fraction * unit_alcohol),
-                    func.sum(unit_alcohol))\
-             .select_from(StockItem)\
-             .join('stocktype')\
-             .join('stockunit')\
-             .filter(StockType.abv != None)\
-             .one()
+    used, total = s.query(func.sum(used_fraction * unit_alcohol),
+                          func.sum(unit_alcohol))\
+                   .select_from(StockItem)\
+                   .join('stocktype')\
+                   .join('stockunit')\
+                   .filter(StockType.abv != None)\
+                   .one()
+
+    return used, total, float(used / total) * 100.0
 
 def on_tap(s):
     # Used in display_on_tap and frontpage
@@ -316,14 +320,16 @@ def display_cans_and_bottles(request):
 
 def display_progress(request):
     s = settings.TILLWEB_DATABASE()
-    alcohol_used, total_alcohol = booziness(s)
+    alcohol_used, total_alcohol, alcohol_used_pct = booziness(s)
     info = EventInfo()
 
     return render(request, 'display-progress.html',
                   context={
                       'info': info, 'alcohol_used': alcohol_used,
                       'total_alcohol': total_alcohol,
-                      'alcohol_used_pct': alcohol_used / total_alcohol * 100.0})
+                      'alcohol_used_pct': alcohol_used_pct,
+                      'alcohol_used_pct_remainder': 100.0 - alcohol_used_pct,
+                  })
 
 def frontpage(request):
     s = settings.TILLWEB_DATABASE()
@@ -333,7 +339,7 @@ def frontpage(request):
     # Production:
     #info = EventInfo()
 
-    alcohol_used, total_alcohol = booziness(s)
+    alcohol_used, total_alcohol, alcohol_used_pct = booziness(s)
 
     ales, kegs, ciders = on_tap(s)
 
@@ -341,7 +347,8 @@ def frontpage(request):
                   {"info": info,
                    "alcohol_used": alcohol_used,
                    "total_alcohol": total_alcohol,
-                   "alcohol_used_pct": (alcohol_used / total_alcohol) * 100,
+                   "alcohol_used_pct": alcohol_used_pct,
+                   "alcohol_used_pct_remainder": 100.0 - alcohol_used_pct,
                    "ales": ales,
                    "kegs": kegs,
                    "ciders": ciders,
@@ -384,7 +391,7 @@ def stock_json(request):
 
 def progress_json(request):
     s = settings.TILLWEB_DATABASE()
-    alcohol_used, total_alcohol = booziness(s)
+    alcohol_used, total_alcohol, alcohol_used_pct = booziness(s)
     info = EventInfo()
 
     return JsonResponse(
