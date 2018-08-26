@@ -20,19 +20,17 @@
 		</thead>
 		<tbody>
 			{% for l in lines %}
+			    {% if l.sale_stocktype %}
 				<tr>
-					{% if l.sale_stocktype %}
-						<td>{{l.sale_stocktype}}</td>
-						{% if l.sale_stocktype.abv %}
-							<td>{{l.sale_stocktype.abv}}%</td>
-						{% else %}
-							<td>&mdash;</td>
-						{% endif %}
-						<td>£{{l.sale_stocktype.saleprice}}/{{l.sale_stocktype.unit.name}}</td>
+					<td>{{l.sale_stocktype}}</td>
+					{% if l.sale_stocktype.abv %}
+						<td>{{l.sale_stocktype.abv}}%</td>
 					{% else %}
-						<td></td><td></td><td></td>
+						<td>&mdash;</td>
 					{% endif %}
+					<td>£{{l.sale_stocktype.saleprice}}/{{l.sale_stocktype.unit.name}}</td>
 				</tr>
+			    {% endif %}
 			{% endfor %}
 		</tbody>
 	</table>
