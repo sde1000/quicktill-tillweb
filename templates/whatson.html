@@ -37,63 +37,70 @@ entirely by volunteers!  Want to help out?  Follow this link!</a></p>
 <p>We should have consumed {{info.expected_consumption}} out of {{info.total_consumption}} booze.  That's {{info.expected_consumption_pct}}%.</p>
 
 <p>We've actually consumed {{alcohol_used}} out of {{total_alcohol}}ml
-alcohol.</p>
+alcohol.  That's {{alcohol_used_pct}}%.</p>
 
-<h1>What's on sale right now?</h1>
+<h1>What's on the bar right now?</h1>
+{% comment %}This was copy-and-pasted from display-on-tap.html - perhaps
+it should go in an include file instead?{% endcomment %}
+	<table>
+		<colgroup>
+			<col width="50%" />
+			<col width="16.66%" />
+			<col width="16.66%" />
+			<col width="16.66%" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>ABV</th>
+				<th>Price</th>
+				<th>Stock status</th>
+			</tr>
+		</thead>
 
-{% if lines %}
-    <table>
-        <colgroup>
-            <col width="75%" />
-            <col width="25%" />
-        </colgroup>
-        <thead>
-            <tr>
-                <th>Drink</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for line, drink, price in lines %}
-                <tr>
-                    <td>{{drink}}</td>
-                    <td>£{{price}}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p>Nothing!</p>
-{% endif %}
+		{% if ales %}
+			<thead class="sub">
+				<tr>
+					<th colspan="4">Real Ales</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% with ales as lines %}
+					{% include "ontap-lines.html" %}
+				{% endwith %}
+			</tbody>
+		{% endif %}
 
+		{% if kegs %}
+			<thead class="sub">
+				<tr>
+					<th colspan="4">Keg Taps</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% with kegs as lines %}
+					{% include "ontap-lines.html" %}
+				{% endwith %}
+			</tbody>
+		{% endif %}
 
-<h1>How much is left in stock?</h1>
+		{% if ciders %}
+			<thead class="sub">
+				<tr>
+					<th colspan="4">Ciders</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% with ciders as lines %}
+					{% include "ontap-lines.html" %}
+				{% endwith %}
+			</tbody>
+		{% endif %}
+	</table>
 
-{% if stock %}
-    <table>
-        <colgroup>
-            <col width="75%" />
-            <col width="25%" />
-        </colgroup>
-        <thead>
-            <tr>
-                <th>Drink</th>
-                <th>Quantity</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for drink, qty, unit in stock %}
-                <tr>
-                    <td>{{drink}}</td>
-                    <td>{{qty}} {{unit}}s</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-<p>Nothing!</p>
-{% endif %}
+<h1>What else does the bar sell?</h1>
 
+<p>Stuff!</p> {% comment %}Links to detail pages for cans, wine, spirits, soft drinks.{% endcomment %}
 
 <h1>What's powering this?</h1>
 
@@ -109,11 +116,12 @@ changes may be made live during EMF!</p>
 
 <p>A simple JSON interface is available:</p>
 <ul>
-  <li><a href="http://bar.emfcamp.org/locations.json">http://bar.emfcamp.org/locations.json</a>
+  <li><a href="{% url "locations-json" %}">http://bar.emfcamp.org{% url "locations-json" %}</a>
   lists the groups of stock that are on sale at the moment</li>
   <li>http://bar.emfcamp.org/location/[name].json lists stock on sale in a
-  location.</li>
-  <li><a href="http://bar.emfcamp.org/stock.json">http://bar.emfcamp.org/stock.json</a> lists everything we have left in stock.</li>
+  location, for example the <a href="{% url "location-json" "Bar" %}">Bar</a> location</li>
+  <li><a href="{% url "stock-json" %}">http://bar.emfcamp.org{% url "stock-json" %}</a> lists everything we have left in stock.</li>
+  <li><a href="{% url "progress-json" %}">http://bar.emfcamp.org{% url "progress-json" %}</a> compares how much we've actually drunk with what we predicted before the event...</li>
 </ul>
 
 {% endblock %}

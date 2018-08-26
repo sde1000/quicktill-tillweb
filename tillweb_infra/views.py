@@ -24,6 +24,7 @@ from sqlalchemy import distinct
 from sqlalchemy import func
 
 import datetime
+import django.utils.timezone
 
 class EventInfo:
     def __init__(self, override_time=None):
@@ -87,6 +88,25 @@ def booziness(s):
              .join('stockunit')\
              .filter(StockType.abv != None)\
              .one()
+
+def on_tap(s):
+    # Used in display_on_tap and frontpage
+    base = s.query(StockItem, StockItem.remaining / StockUnit.size)\
+            .join('stocktype')\
+            .join('stockline')\
+            .join('stockunit')\
+            .filter(StockLine.location == "Bar")\
+            .order_by(StockType.manufacturer, StockType.name)\
+            .options(undefer('remaining'))\
+            .options(contains_eager('stocktype'))
+
+    ales = base.filter(StockType.dept_id == 1).all()
+
+    kegs = base.filter(StockType.dept_id.in_([2, 13])).all()
+
+    ciders = base.filter(StockType.dept_id == 3).all()
+
+    return ales, kegs, ciders
 
 def index(request):
     return render(request, "index.html", {'pubname': settings.TILLWEB_PUBNAME})
@@ -274,21 +294,7 @@ def refusals(request):
 
 def display_on_tap(request):
     s = settings.TILLWEB_DATABASE()
-
-    base = s.query(StockItem, StockItem.remaining / StockUnit.size)\
-            .join('stocktype')\
-            .join('stockline')\
-            .join('stockunit')\
-            .filter(StockLine.location == "Bar")\
-            .order_by(StockType.manufacturer, StockType.name)\
-            .options(undefer('remaining'))\
-            .options(contains_eager('stocktype'))
-
-    ales = base.filter(StockType.dept_id == 1).all()
-
-    kegs = base.filter(StockType.dept_id.in_([2, 13])).all()
-
-    ciders = base.filter(StockType.dept_id == 3).all()
+    ales, kegs, ciders = on_tap(s)
 
     return render(request, 'display-on-tap.html',
                   context={'ales': ales, 'kegs': kegs, 'ciders': ciders})
@@ -321,17 +327,6 @@ def display_progress(request):
 
 def frontpage(request):
     s = settings.TILLWEB_DATABASE()
-    pub = settings.TILLWEB_PUBNAME
-    lines = s.query(StockLine)\
-             .order_by(StockLine.name)\
-             .all()
-
-    stock = s.query(StockType)\
-            .filter(StockType.remaining > 0)\
-            .order_by(StockType.dept_id)\
-            .order_by(StockType.manufacturer)\
-            .order_by(StockType.name)\
-            .all()
 
     # Testing:
     info = EventInfo(datetime.datetime(2018, 9, 1, 11, 30))
@@ -340,27 +335,25 @@ def frontpage(request):
 
     alcohol_used, total_alcohol = booziness(s)
 
+    ales, kegs, ciders = on_tap(s)
+
     return render(request, "whatson.html",
-                  {"pubname": pub,
-                   "lines": [
-                       (l.name, l.sale_stocktype.format(),
-                        l.sale_stocktype.pricestr)
-                       for l in lines
-                       if l.stockonsale or l.linetype == 'continuous'],
-                   "stock": [(s.format(), s.remaining, s.unit.name)
-                             for s in stock],
-                   "info": info,
+                  {"info": info,
                    "alcohol_used": alcohol_used,
                    "total_alcohol": total_alcohol,
+                   "alcohol_used_pct": (alcohol_used / total_alcohol) * 100.0,
+                   "ales": ales,
+                   "kegs": kegs,
+                   "ciders": ciders,
                   })
 
-def locations(request):
+def locations_json(request):
     s = settings.TILLWEB_DATABASE()
     locations = [x[0] for x in s.query(distinct(StockLine.location))
                  .order_by(StockLine.location).all()]
     return JsonResponse({'locations': locations})
 
-def location(request, location):
+def location_json(request, location):
     s = settings.TILLWEB_DATABASE()
     lines = s.query(StockLine)\
              .filter(StockLine.location == location)\
@@ -375,7 +368,7 @@ def location(request, location):
          "unit": l.sale_stocktype.unit.name}
         for l in lines if l.stockonsale or l.linetype == "continuous"]})
 
-def stock(request):
+def stock_json(request):
     s = settings.TILLWEB_DATABASE()
     stock = s.query(StockType)\
              .filter(StockType.remaining > 0)\
@@ -389,3 +382,13 @@ def stock(request):
         'unit': s.unit.name
         } for s in stock]})
 
+def progress_json(request):
+    s = settings.TILLWEB_DATABASE()
+    alcohol_used, total_alcohol = booziness(s)
+    info = EventInfo()
+
+    return JsonResponse(
+        {'licensed_time_pct': info.completed_pct,
+         'expected_consumption_pct': info.expected_consumption_pct,
+         'actual_consumption_pct': (alcohol_used / total_alcohol) * 100.0,
+        })
