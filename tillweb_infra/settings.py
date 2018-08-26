@@ -25,7 +25,7 @@ with open(os.path.join(BASE_DIR, "secret_key")) as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ "192.168.0.79" ]
+ALLOWED_HOSTS = []
 
 # Application definition
 
