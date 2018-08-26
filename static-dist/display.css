@@ -4,6 +4,8 @@
 
 @import fonts.css;
 
+html, body { min-height: 100%; }
+
 body {
 	background: #020021 url( /static/bg.png ) no-repeat;
 	background-size: contain;
@@ -35,7 +37,7 @@ header div h1 {
 }
 
 main table {
-	font-size: 23pt;
+	font-size: 21pt;
 	line-height: 1.5;
 	width: 100%;
 	border-spacing: 0;
@@ -44,6 +46,11 @@ main table {
 main table thead th {
 	text-align: left;
 	border-bottom: 1pt solid #5f1539;
+}
+
+main table thead.sub th {
+	padding-top: 1em;
+	border-bottom: unset;
 }
 
 main table tbody tr:nth-child(odd) {
