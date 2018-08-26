@@ -190,57 +190,9 @@ def userdetail(request, userid):
 
 from quicktill.models import *
 
-# XXX HACK
-
-# This is a copy of tillweb_view from quicktill.tillweb.views but with
-# the login_required code removed.  This lets us apply @login_required
-# on a view-by-view basis.
-
 # We use this date format in templates - defined here so we don't have
 # to keep repeating it.  It's available in templates as 'dtf'
 dtf = "Y-m-d H:i"
-
-def tillweb_view(view):
-    def new_view(request, pubname="", *args, **kwargs):
-        till = None
-        tillname = settings.TILLWEB_PUBNAME
-        access = settings.TILLWEB_DEFAULT_ACCESS
-        session = settings.TILLWEB_DATABASE()
-        try:
-            info = {
-                'access': access,
-                'tillname': tillname, # Formatted for people
-                'pubname': pubname, # Used in url
-            }
-            result = view(request, info, session, *args, **kwargs)
-            if isinstance(result, HttpResponse):
-                return result
-            t, d = result
-            # object is the Till object, possibly used for a nav menu
-            # (it's None if we are set up for a single site)
-            # till is the name of the till
-            # access is 'R','M','F'
-            defaults = {'object': till,
-                        'till': tillname, 'access': access,
-                        'dtf': dtf, 'pubname': pubname,
-                        'version': version}
-            if t.endswith(".ajax"):
-                # AJAX content typically is not a fully-formed HTML document.
-                # If requested in a non-AJAX context, add a HTML container.
-                if not request.is_ajax():
-                    defaults['ajax_content'] = 'tillweb/' + t
-                    t = 'non-ajax-container.html'
-            defaults.update(d)
-            return render(request, 'tillweb/' + t, defaults)
-        except OperationalError as oe:
-            t = get_template('tillweb/operationalerror.html')
-            return HttpResponse(
-                t.render(RequestContext(
-                        request, {'object':till, 'access':access, 'error':oe})),
-                status=503)
-        finally:
-            session.close()
-    return new_view
 
 @login_required
 def refusals(request):
