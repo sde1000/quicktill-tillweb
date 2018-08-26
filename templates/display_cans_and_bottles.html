@@ -7,20 +7,32 @@
 {% block content %}
 
 <table>
-  <thead>
-    <tr><th>Manufacturer</th><th>Name</th><th>ABV</th><th>Price</th><th>Remaining</th></tr>
-  </thead>
-  <tbody>
-    {% for t in types %}
-    <tr>
-      <td>{{t.manufacturer}}</td>
-      <td>{{t.name}}</td>
-      <td>{{t.abv}}%</td>
-      <td>£{{t.saleprice}}/{{t.unit.name}}</td>
-      <td>{{t.remaining}}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
+	<colgroup>
+		<col width="25%" />
+		<col width="25%" />
+		<col width="12.5%" />
+		<col width="12.5%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>Manufacturer</th>
+			<th>Name</th>
+			<th>ABV</th>
+			<th>Price</th>
+			<!-- <th>Remaining</th> -->
+		</tr>
+	</thead>
+	<tbody>
+		{% for t in types %}
+			<tr>
+				<td>{{t.manufacturer}}</td>
+				<td>{{t.name}}</td>
+				<td>{{t.abv}}%</td>
+				<td>£{{t.saleprice}}/{{t.unit.name}}</td>
+				<!-- <td>{{t.remaining|stringformat:"d"}}</td> -->
+			</tr>
+		{% endfor %}
+	</tbody>
 </table>
 
 {% endblock %}

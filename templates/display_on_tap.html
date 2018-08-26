@@ -5,25 +5,35 @@
 {% block header %}Currently On Tap{% endblock %}
 
 {% block content %}
-
-<table>
-  <thead>
-    <tr><th>Tap</th><th>Name</th><th>ABV</th><th>Price</th></tr>
-  </thead>
-  <tbody>
-    {% for l in lines %}
-    <tr>
-      <td>{{l.name}}</td>
-      {% if l.sale_stocktype %}
-      <td>{{l.sale_stocktype}}</td>
-      <td>{{l.sale_stocktype.abv}}%</td>
-      <td>£{{l.sale_stocktype.saleprice}}/{{l.sale_stocktype.unit.name}}</td>
-      {% else %}
-      <td></td><td></td><td></td>
-      {% endif %}
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
+	<table>
+		<colgroup>
+			<col width="75%" />
+			<col width="12.5%" />
+			<col width="12.5%" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>ABV</th>
+				<th>Price</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for l in lines %}
+				<tr>
+					{% if l.sale_stocktype %}
+						<td>{{l.sale_stocktype}}</td>
+						{% if l.sale_stocktype.abv %}
+							<td>{{l.sale_stocktype.abv}}%</td>
+						{% else %}
+							<td>&mdash;</td>
+						{% endif %}
+						<td>£{{l.sale_stocktype.saleprice}}/{{l.sale_stocktype.unit.name}}</td>
+					{% else %}
+						<td></td><td></td><td></td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}
