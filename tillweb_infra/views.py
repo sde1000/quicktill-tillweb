@@ -75,6 +75,7 @@ def booziness(s):
     # here is 'ml' which is size 1ml
     unit_alcohol = case([(StockUnit.unit_id == 'pt', 568.0),
                         (StockUnit.unit_id == '25ml', 25.0),
+                        (StockUnit.unit_id == '50ml', 50.0),
                         (StockUnit.unit_id == 'can', 350.0),
                         (StockUnit.unit_id == 'bottle', 330.0),
                         ], else_=1.0) * StockUnit.size * StockType.abv / 100.0
