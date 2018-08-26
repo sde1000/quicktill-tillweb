@@ -3,8 +3,10 @@
 {% block title %}The Robot Arms{% endblock %}
 {% block heading %}The Robot Arms{% endblock %}
 {% block content %}
-<p><a href="https://www.emfcamp.org/volunteer/">The Robot Arms is run
+<p class="alert-block"><a href="https://www.emfcamp.org/volunteer/">The Robot Arms is run
 entirely by volunteers!  Want to help out?  Follow this link!</a></p>
+
+
 
 <h1>Event progress</h1>
 
@@ -20,34 +22,54 @@ entirely by volunteers!  Want to help out?  Follow this link!</a></p>
 <h1>What's on sale right now?</h1>
 
 {% if lines %}
-<table>
-  <thead>
-    <tr><th>Line</th><th>Drink</th><th>Price</th></tr>
-  </thead>
-  <tbody>
-    {% for line, drink, price in lines %}
-    <tr><td>{{line}}</td><td>{{drink}}</td><td>£{{price}}</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+    <table>
+        <colgroup>
+            <col width="75%" />
+            <col width="25%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Drink</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for line, drink, price in lines %}
+                <tr>
+                    <td>{{drink}}</td>
+                    <td>£{{price}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% else %}
-<p>Nothing!</p>
+    <p>Nothing!</p>
 {% endif %}
 
 
 <h1>How much is left in stock?</h1>
 
 {% if stock %}
-<table>
-  <thead>
-    <tr><th>Drink</th><th>Quantity</th></tr>
-  </thead>
-  <tbody>
-    {% for drink, qty, unit in stock %}
-    <tr><td>{{drink}}</td><td>{{qty}} {{unit}}s</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+    <table>
+        <colgroup>
+            <col width="75%" />
+            <col width="25%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Drink</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for drink, qty, unit in stock %}
+                <tr>
+                    <td>{{drink}}</td>
+                    <td>{{qty}} {{unit}}s</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% else %}
 <p>Nothing!</p>
 {% endif %}

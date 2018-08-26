@@ -11,8 +11,11 @@
 {% endblock %}
   </head>
   <body>
-    <header>{% block heading %}Heading{% endblock %}
-      {% if is_paginated %} — page {{ page }} of {{ pages }}{% endif %}
+    <header>
+        <div>
+            <h1>{% block heading %}Heading{% endblock %}</h1>
+            {% if is_paginated %} — page {{ page }} of {{ pages }}{% endif %}
+        </div>
     </header>
 
     <nav>

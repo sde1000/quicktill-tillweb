@@ -2,87 +2,125 @@
 
 @charset "UTF-8";
 
+@import fonts.css;
+
+html, body { min-height: 100%; }
+
 body {
-    margin:0px;
-    padding:0px;
-    font:11px sans-serif;
-    font-family: helvetica, sans-serif;
-    color:#333;
-    background-color:white;
-}
-h1 {
-    font-size:18px;
-    font-weight:900;
-    color:black;
+	background: #020021 url( /static/bg.png ) no-repeat;
+	background-size: contain;
+	color: white;
+	font-size: 12pt;
+	font-family: Raleway, sans-serif;
+	padding: 0;
+	margin: 2.5em;
 }
 
-a {
-    color:#09c;
-    font-size:11px;
-    text-decoration:none;
-    font-weight:600;
-    font-family:verdana, arial, helvetica, sans-serif;
+header {
+	background: url( /static/logo.png ) no-repeat;
+	background-size: contain;
+	display: table;
+	width: 100%;
+	height: 5%;
+	min-height: 7em;
+	margin-bottom: 2.5%;
+}
+
+header div {
+	display: table-cell;
+	text-align: center;
+}
+
+header div h1 {
+	text-align: center;
+	font-size: 2.5em;
+}
+
+p.alert-block {
+	border: 1px solid #5f1539;
+	border-radius: .25em;
+	background: rgb(95, 21, 57, 0.5);
+	padding: 1em;
+
+}
+
+a:link, a:visited, a:hover {
+	color: white;
+}
+
+table {
+	line-height: 1.5;
+	width: 100%;
+	border-spacing: 0;
+}
+
+table thead th {
+	text-align: left;
+	border-bottom: 1pt solid #5f1539;
+}
+
+table tbody tr:nth-child(odd) {
+	background-color: rgba( 255, 255, 255, .1 );
+}
+
+/* a {
+	color:#09c;
+	font-size:11px;
+	text-decoration:none;
+	font-weight:600;
+	font-family:verdana, arial, helvetica, sans-serif;
 }
 a:link {color:#09c;}
 a:visited {color:#07a;}
 a:hover {color:#e00;}
 
-header {
-    padding: 10px 20px;
-    border-style: solid;
-    border-color: black;
-    border-width: 0px 0px 1px 0px;
-    background-color: #eee;
-    font-size: 25px;
-}
-
 #Userinfo {
-    position: absolute;
-    padding: 5px;
-    top: 0px;
-    right: 0px;
-    height: 25px;
+	position: absolute;
+	padding: 5px;
+	top: 0px;
+	right: 0px;
+	height: 25px;
 }
 
 .navarrow {
-    float: right;
-    padding: 3px;
+	float: right;
+	padding: 3px;
 }
 
 #Content {
-    margin:0px 0px 20px 20px;
-    padding:10px;
+	margin:0px 0px 20px 20px;
+	padding:10px;
 }
 
 #Pagination {
-    position:absolute;
-    top:84px;
-    right:20px;
-    width:100px;
-    padding:10px;
-    background-color:#eee;
-    border:1px dashed #999;
-    line-height:20px;
+	position:absolute;
+	top:84px;
+	right:20px;
+	width:100px;
+	padding:10px;
+	background-color:#eee;
+	border:1px dashed #999;
+	line-height:20px;
 }
 #Pagination ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    width: 100px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	width: 100px;
 }
 
 form table th { text-align: right; }
 form table td + td { text-align: left; }
 form ul.errorlist {
-    color: red;
-    list-style: none;
+	color: red;
+	list-style: none;
 }
 form fieldset { border: none; }
 
 table.userlist {
-    border: solid;
-    border-width: 1px;
+	border: solid;
+	border-width: 1px;
 }
 
 /* Define your currency symbol here! */
-.money:before { content: "£"; }
+.money:before { content: "£"; } */
