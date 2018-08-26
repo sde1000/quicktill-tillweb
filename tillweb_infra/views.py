@@ -314,8 +314,10 @@ def display_progress(request):
     info = EventInfo()
 
     return render(request, 'display-progress.html',
-                  context={'info': info, 'alcohol_used': alcohol_used,
-                           'total_alcohol': total_alcohol})
+                  context={
+                      'info': info, 'alcohol_used': alcohol_used,
+                      'total_alcohol': total_alcohol,
+                      'alcohol_used_pct': alcohol_used / total_alcohol * 100.0})
 
 def frontpage(request):
     s = settings.TILLWEB_DATABASE()
