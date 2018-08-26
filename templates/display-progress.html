@@ -1,0 +1,19 @@
+{% extends "display.html" %}
+
+{% block title %}Event Progress{% endblock %}
+
+{% block header %}Event Progress{% endblock %}
+
+{% block content %}
+<p>Based on current time of {{info.now}}</p>
+<p>Bar is currently {% if info.open %}open{% else %}closed{% endif %}.</p>
+{% if info.open %}
+<p>Bar closes at {{info.closes_at}}.</p>
+{% endif %}
+<p>Bar next opens at {{info.next_open}}.</p>
+<p>We have been open for {{info.time_passed}} out of {{info.length}}.  That's {{info.completed_pct}}%.</p>
+<p>We should have consumed {{info.expected_consumption}} out of {{info.total_consumption}} booze.  That's {{info.expected_consumption_pct}}%.</p>
+
+<p>We've actually consumed {{alcohol_used}} out of {{total_alcohol}}ml
+alcohol.</p>
+{% endblock %}

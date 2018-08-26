@@ -43,4 +43,5 @@ urlpatterns = [
     url(r'^display/on-tap.html$', views.display_on_tap, name="display-on-tap"),
     url(r'^display/cans-and-bottles.html$', views.display_cans_and_bottles,
         name="display-cans-and-bottles"),
+    url(r'^display/progress.html$', views.display_progress, name="display-progress"),
 ]

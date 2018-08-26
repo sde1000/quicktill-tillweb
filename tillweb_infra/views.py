@@ -308,6 +308,15 @@ def display_cans_and_bottles(request):
     return render(request, 'display-cans-and-bottles.html',
                   context={'types': r})
 
+def display_progress(request):
+    s = settings.TILLWEB_DATABASE()
+    alcohol_used, total_alcohol = booziness(s)
+    info = EventInfo()
+
+    return render(request, 'display-progress.html',
+                  context={'info': info, 'alcohol_used': alcohol_used,
+                           'total_alcohol': total_alcohol})
+
 def frontpage(request):
     s = settings.TILLWEB_DATABASE()
     pub = settings.TILLWEB_PUBNAME
