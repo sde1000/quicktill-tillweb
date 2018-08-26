@@ -21,6 +21,7 @@ from sqlalchemy.orm import defaultload
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import undefer, defer, undefer_group
 from sqlalchemy import distinct
+from sqlalchemy import func
 
 import datetime
 
@@ -59,6 +60,32 @@ class EventInfo:
                                              / self.total_consumption
         self.expected_consumption_pct = self.expected_consumption_fraction \
                                         * 100.0
+
+def booziness(s):
+    """How much booze have we used?
+
+    Pass in an ORM session.  Returns tuple of amount of alcohol used
+    and total amount of alcohol.
+    """
+
+    used_fraction = case([(StockItem.finished != None, 1.0)],
+                    else_=StockItem.used / StockUnit.size)
+
+    # Amount of alcohol in stock item in ml.  The unit ID we're not listing
+    # here is 'ml' which is size 1ml
+    unit_alcohol = case([(StockUnit.unit_id == 'pt', 568.0),
+                        (StockUnit.unit_id == '25ml', 25.0),
+                        (StockUnit.unit_id == 'can', 350.0),
+                        (StockUnit.unit_id == 'bottle', 330.0),
+                        ], else_=1.0) * StockUnit.size * StockType.abv / 100.0
+
+    return s.query(func.sum(used_fraction * unit_alcohol),
+                    func.sum(unit_alcohol))\
+             .select_from(StockItem)\
+             .join('stocktype')\
+             .join('stockunit')\
+             .filter(StockType.abv != None)\
+             .one()
 
 def index(request):
     return render(request, "index.html", {'pubname': settings.TILLWEB_PUBNAME})
@@ -299,6 +326,8 @@ def frontpage(request):
     # Production:
     #info = EventInfo()
 
+    alcohol_used, total_alcohol = booziness(s)
+
     return render(request, "whatson.html",
                   {"pubname": pub,
                    "lines": [
@@ -309,6 +338,8 @@ def frontpage(request):
                    "stock": [(s.format(), s.remaining, s.unit.name)
                              for s in stock],
                    "info": info,
+                   "alcohol_used": alcohol_used,
+                   "total_alcohol": total_alcohol,
                   })
 
 def locations(request):
