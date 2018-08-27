@@ -49,6 +49,8 @@ urlpatterns = [
         name="display-wines-and-spirits"),
     url(r'^display/club-mate.html$', views.display_club_mate,
         name="display-club-mate"),
+    url(r'^display/soft-drinks.html$', views.display_soft_drinks,
+        name="display-soft-drinks"),
     url(r'^display/progress.html$', views.display_progress,
         name="display-progress"),
 ]

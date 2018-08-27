@@ -368,6 +368,18 @@ def display_club_mate(request):
     return render(request, 'display-club-mate.html',
                   context={'mate': mate})
 
+def display_soft_drinks(request):
+    s = settings.TILLWEB_DATABASE()
+    soft = s.query(StockType, StockType.remaining / StockType.total * 100.0)\
+            .filter(StockType.dept_id == 7)\
+        .filter(StockType.remaining > 0.0)\
+        .options(undefer('remaining'))\
+        .order_by(StockType.manufacturer, StockType.name)\
+        .all()
+
+    return render(request, 'display-soft-drinks.html',
+                  context={'soft': soft})
+
 def display_progress(request):
     s = settings.TILLWEB_DATABASE()
     alcohol_used, total_alcohol, alcohol_used_pct = booziness(s)
