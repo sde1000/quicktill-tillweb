@@ -1,0 +1,17 @@
+{% extends "display.html" %}
+
+{% block title %}Club Mate{% endblock %}
+
+{% block header %}Club Mate{% endblock %}
+
+{% block content %}
+
+<p><strong>Also available in cases!</strong></p>
+
+<p>This should be a fuel gauge display...</p>
+
+{% for st, remaining, total, remain_pct in mate %}
+<p>{{st.manufacturer}} {{st.name}}: remaining {{remaining}}, total {{total}}, remaining {{remain_pct}}%, sells for £{{st.saleprice}}</p>
+{% endfor %}
+
+{% endblock %}

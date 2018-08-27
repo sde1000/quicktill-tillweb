@@ -280,6 +280,21 @@ def userdetail(request, userid):
 
 from quicktill.models import *
 
+# Monkeypatch the StockType class to have a "total" column so we can
+# easily read total amounts of stuff ordered
+StockType.total = column_property(
+    select([func.coalesce(func.sum(
+        select([func.sum(StockUnit.size)],
+               StockUnit.id == StockItem.stockunit_id).as_scalar()
+    ), text("0.0"))],
+           and_(StockItem.stocktype_id == StockType.id,
+                Delivery.id == StockItem.deliveryid,
+                Delivery.checked == True)).\
+        correlate(StockType.__table__).\
+        label('total'),
+    deferred=True,
+    doc="Total amount booked in")
+
 # We use this date format in templates - defined here so we don't have
 # to keep repeating it.  It's available in templates as 'dtf'
 dtf = "Y-m-d H:i"
@@ -342,6 +357,16 @@ def display_wines_and_spirits(request):
     return render(request, 'display-wines-and-spirits.html',
                   context={'wines': wines, 'spirits': spirits})
 
+def display_club_mate(request):
+    s = settings.TILLWEB_DATABASE()
+    mate = s.query(StockType, StockType.remaining, StockType.total,
+                   StockType.remaining / StockType.total * 100.0)\
+            .filter(StockType.manufacturer == "Club Mate")\
+            .order_by(desc(StockType.name))\
+            .all()
+
+    return render(request, 'display-club-mate.html',
+                  context={'mate': mate})
 
 def display_progress(request):
     s = settings.TILLWEB_DATABASE()
