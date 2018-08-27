@@ -12,9 +12,9 @@
             <div class="status closed">
                 <h2>CLOSED</h2>
                 {% if info.next_open %}
-                    <p>Opening at {{ info.next_open|date:"H:i" }}</p>
+                    <p>Opening {{ info.next_open|date:"l H:i" }}</p>
                 {% else %}
-                    <p>Thats a wrap!</p>
+                    <p>See you in 2020!</p>
                 {% endif %}
             </div>
         {% endif %}
@@ -92,7 +92,12 @@ it should go in an include file instead?{% endcomment %}
 
 <h1>What else does the bar sell?</h1>
 
-<p>Stuff!</p> {% comment %}Links to detail pages for cans, wine, spirits, soft drinks.{% endcomment %}
+<ul>
+  <li><a href="{% url "display-cans-and-bottles" %}">Cans and bottles</a></li>
+  <li><a href="{% url "display-wines-and-spirits" %}">Wines and spirits</a></li>
+  <li>Club Mate and Mate Tea</li>
+  <li>Soft drinks</li>
+</ul>
 
 <h1>What's powering this?</h1>
 

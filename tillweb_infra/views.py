@@ -318,6 +318,31 @@ def display_cans_and_bottles(request):
     return render(request, 'display-cans-and-bottles.html',
                   context={'types': r})
 
+def display_wines_and_spirits(request):
+    s = settings.TILLWEB_DATABASE()
+    wines = s.query(StockLine,
+                    func.round(StockType.saleprice / (750/125), 1),
+                    func.round(StockType.saleprice / (750/175), 1),
+                    func.round(StockType.saleprice / (750/250), 1))\
+             .join(StockType)\
+             .filter(StockType.dept_id == 9)\
+             .filter(StockType.remaining > 0.0)\
+             .order_by(StockType.manufacturer, StockType.name)\
+             .all()
+
+    # We want all stocktypes with dept 4, but only
+    # if there are >0 qty remaining
+    spirits = s.query(StockType)\
+               .filter(StockType.dept_id == 4)\
+               .filter(StockType.remaining > 0.0)\
+               .options(undefer('remaining'))\
+               .order_by(StockType.manufacturer, StockType.name)\
+               .all()
+
+    return render(request, 'display-wines-and-spirits.html',
+                  context={'wines': wines, 'spirits': spirits})
+
+
 def display_progress(request):
     s = settings.TILLWEB_DATABASE()
     alcohol_used, total_alcohol, alcohol_used_pct = booziness(s)
@@ -335,9 +360,9 @@ def frontpage(request):
     s = settings.TILLWEB_DATABASE()
 
     # Testing:
-    info = EventInfo(datetime.datetime(2018, 9, 1, 11, 30))
+    #info = EventInfo(datetime.datetime(2018, 9, 1, 11, 30))
     # Production:
-    #info = EventInfo()
+    info = EventInfo()
 
     alcohol_used, total_alcohol, alcohol_used_pct = booziness(s)
 
