@@ -2,7 +2,8 @@
 
 @charset "UTF-8";
 
-@import fonts.css;
+@import url( 'fonts.css' );
+@import url( 'bargraph.css' );
 
 html, body { min-height: 100%; }
 
