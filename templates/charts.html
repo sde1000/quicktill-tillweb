@@ -1,13 +1,13 @@
 <h2>Target consumption</h2>
 <p>Based on previous years sales this is where we expect to be.</p>
 <div class="bargraph" style="margin-bottom: 2.5em;">
-	<div class="bar" style="width:{{info.expected_consumption_pct_remainder}}%;"><span>{{info.expected_consumption_pct_remainder|stringformat:"0.1f"}}%</span></div>
+	<div class="bar remaining" style="width:{{info.expected_consumption_pct_remainder}}%;"><span>{{info.expected_consumption_pct_remainder|stringformat:"0.1f"}}%</span></div>
 </div>
 
 <h2>Actual consumption</h2>
 <p>We've actually consumed {{alcohol_used_pct|stringformat:"0.1f"}}% of the alcohol.</p>
 <div class="bargraph" style="margin-bottom: 2.5em;">
-	<div class="bar" style="width:{{alcohol_used_pct_remainder}}%;"><span>{{alcohol_used_pct_remainder|stringformat:"0.1f"}}%</span></div>
+	<div class="bar remaining" style="width:{{alcohol_used_pct_remainder}}%;"><span>{{alcohol_used_pct_remainder|stringformat:"0.1f"}}%</span></div>
 </div>
 
 <h2>Time passed</h2>

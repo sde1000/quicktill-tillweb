@@ -37,6 +37,16 @@ header div h1 {
 	font-size: 2.5em;
 }
 
+@media screen and ( max-width: 1024px ) {
+	header {
+		background: none;
+	}
+
+	header div h1 {
+		text-align: left;
+	}
+}
+
 header div div.status {
 	position: absolute;
 	top: 15pt;
@@ -48,6 +58,43 @@ header div div.status h2 {
 	color: black;
 	border-radius: 0.25em;
 	padding: .25em .5em;
+}
+
+@media screen and ( max-width: 600px ) {
+	header div div.status {
+		position: relative;
+		top: unset;
+		right: unset;
+	}
+}
+
+.split {
+	display: flex;
+}
+
+.split > div {
+	flex: 1 1 auto;
+	width: 50%;
+	margin: 0 1em;
+}
+
+@media screen and ( max-width: 768px ) {
+	.split {
+		display: block;
+	}
+	.split > div {
+		width: 100%;
+		flex: unset;
+		margin: 0;
+	}
+}
+
+.split > div:first-child {
+	margin-left: 0;
+}
+
+.split > div:last-child {
+	margin-right: 0;
 }
 
 .status.closed h2 {
