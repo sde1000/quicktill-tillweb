@@ -25,7 +25,7 @@ with open(os.path.join(BASE_DIR, "secret_key")) as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -88,7 +88,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-GB'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/London'
 
 USE_I18N = True
 
