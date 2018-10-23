@@ -11,6 +11,7 @@ cd "${DIR}"
 export DJANGO_SETTINGS_MODULE=tillweb_infra.settings_production
 export LANG=en_GB.UTF8
 export LC_CTYPE=en_GB.UTF8
+source ${DIR}/venv/bin/activate
 test -f ${pidfile} && /sbin/start-stop-daemon --stop --signal=INT --pidfile=${pidfile} --retry 10 --oknodo
 mkdir -p "${DIR}/static"
 python3 manage.py collectstatic --noinput
