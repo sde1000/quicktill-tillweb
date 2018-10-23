@@ -52,7 +52,7 @@ def pwchange(request):
                     reverse("user-profile-page"))
             else:
                 messages.info(request,"Incorrect password - changes not made")
-            return HttpResponseRedirect("")
+            return HttpResponseRedirect(reverse("password-change-page"))
     else:
         form = PasswordChangeForm()
     return render(request, 'registration/password-change.html',
@@ -107,7 +107,7 @@ def users(request):
                 user.save()
                 messages.info(
                     request, "Added new user '{}'".format(cd['username']))
-                return HttpResponseRedirect("")
+                return HttpResponseRedirect(reverse("userlist"))
             except IntegrityError:
                 form.add_error(None, "That username is already in use")
     else:
@@ -127,7 +127,7 @@ def userdetail(request, userid):
         messages.error(request, "You cannot edit users marked as 'staff' "
                        "or 'superuser' here; you must use the admin interface "
                        "instead")
-        return HttpResponseRedirect("")
+        return HttpResponseRedirect(reverse("userlist"))
 
     if request.method == 'POST' and 'update' in request.POST:
         form = UserForm(request.POST)
@@ -136,7 +136,7 @@ def userdetail(request, userid):
             if cd['newpassword'] and u == request.user:
                 messages.info(request, "You can't change your own password "
                               "here; use the password change page instead")
-                return HttpResponseRedirect("")
+                return HttpResponseRedirect(reverse("userlist"))
             try:
                 if cd['username'] != u.username:
                     u.username = cd['username']
@@ -154,13 +154,13 @@ def userdetail(request, userid):
                     u.user_permissions.remove(permission)
                 u.save()
                 messages.info(request, "User details updated")
-                return HttpResponseRedirect("")
+                return HttpResponseRedirect(reverse("userlist"))
             except IntegrityError:
                 form.add_error("username", "That username is already in use")
     elif request.method == 'POST' and 'delete' in request.POST:
         if u == request.user:
             messages.error(request, "You cannot delete yourself")
-            return HttpResponseRedirect("")
+            return HttpResponseRedirect(reverse("userlist"))
         u.delete()
         messages.info(request, "User '{}' removed".format(u.username))
         return HttpResponseRedirect(reverse("userlist"))
