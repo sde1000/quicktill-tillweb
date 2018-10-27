@@ -22,6 +22,7 @@ admin.autodiscover()
 admin.site.site_header = "Till administration"
 
 import quicktill.tillweb.urls
+import tillmenu.urls
 
 urlpatterns = [
     url(r'^accounts/', include([

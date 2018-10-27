@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
     'quicktill.tillweb',
+    'tillmenu',
 )
 
 MIDDLEWARE = (
