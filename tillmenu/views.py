@@ -53,7 +53,8 @@ def menu(request, menuid):
         form = MenuForm(request.POST, instance=menu)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('tillmenu-detail', (menuid,)))
+            return HttpResponseRedirect(reverse('tillmenu-detail',
+                                                args=[menuid]))
     else:
         form = MenuForm(instance=menu)
 
@@ -75,8 +76,8 @@ def menu(request, menuid):
             f.write(parser.boilerplate)
             f.write(output)
             f.write('\n')
-        return HttpResponseRedirect(reverse('tillmenu-detail', (menuid,)))
-        
+        return HttpResponseRedirect(reverse('tillmenu-detail', args=[menuid]))
+
     return render(request, "tillmenu/menu.html",
                   context={
                       'menu': menu,
