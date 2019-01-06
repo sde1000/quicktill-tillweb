@@ -116,7 +116,7 @@ ABSOLUTE_URL_OVERRIDES = {
 from .settings_database import *
 
 # Feature flags
-FOOD_MENU_EDITOR = True
+FOOD_MENU_EDITOR = False
 
 # Logging - when running testserver, output SQL queries and responses
 LOGGING = {
