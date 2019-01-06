@@ -65,6 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'tillmenu.context_processors.food_menu_editor_setting',
             ],
         },
     },
@@ -113,6 +114,9 @@ ABSOLUTE_URL_OVERRIDES = {
 # Till database access
 
 from .settings_database import *
+
+# Feature flags
+FOOD_MENU_EDITOR = True
 
 # Logging - when running testserver, output SQL queries and responses
 LOGGING = {

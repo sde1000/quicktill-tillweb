@@ -2,14 +2,24 @@ from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect
 from django import forms
 from django.urls import reverse
+from django.conf import settings
 
 from .models import Menu, default_menu
 
 from . import parser
 
+def food_menu_editor_view(func):
+    def check_feature_flag(*args, **kwargs):
+        enabled = getattr(settings, "FOOD_MENU_EDITOR", False)
+        if not enabled:
+            raise Http404
+        return func(*args, **kwargs)
+    return check_feature_flag
+
 class NewMenuForm(forms.Form):
     name = forms.CharField(max_length=80)
 
+@food_menu_editor_view
 def index(request):
     menus = Menu.objects.all()
 
@@ -43,6 +53,7 @@ class MenuForm(forms.ModelForm):
                 }),
         }
 
+@food_menu_editor_view
 def menu(request, menuid):
     try:
         menu = Menu.objects.get(id=int(menuid))

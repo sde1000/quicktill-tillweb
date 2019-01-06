@@ -13,7 +13,9 @@
   {% if may_edit_users %}
   <li><a href="{% url "userlist" %}">Add or remove users</a></li>
   {% endif %}
+  {% if FOOD_MENU_EDITOR %}
   <li><a href="{% url "tillmenu-index" %}">Edit the food menu</a></li>
+  {% endif %}
 </ul>
 
 {% endblock %}
