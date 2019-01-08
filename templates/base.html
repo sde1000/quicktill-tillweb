@@ -11,9 +11,9 @@
 {% endblock %}
 {% block jquery %}
 {% if user.is_authenticated %}
-<link rel="STYLESHEET" type="text/css" href="{% static "jquery/jquery-ui.css" %}">
+<link rel="STYLESHEET" type="text/css" href="{% static "jquery-ui/jquery-ui.css" %}">
 <script type="text/javascript" src="{% static "jquery.js" %}"></script>
-<script type="text/javascript" src="{% static "jquery-ui.js" %}"></script>
+<script type="text/javascript" src="{% static "jquery-ui/jquery-ui.min.js" %}"></script>
 {% endif %}
 {% endblock %}
 {% block scripts %}
