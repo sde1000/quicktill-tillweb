@@ -173,4 +173,4 @@ def userdetail(request, userid):
         })
 
     return render(request, 'registration/userdetail.html',
-                  {'object': u, 'form': form})
+                  {'form': form, 'formuser': u})

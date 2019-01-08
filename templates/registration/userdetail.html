@@ -1,22 +1,23 @@
 {% extends "base.html" %}
+{% load django_bootstrap_breadcrumbs %}
 
 {% block title %}Till web user — {{object.get_full_name}}{% endblock %}
-
-{% block heading %}Till web user — {{object.get_full_name}}{% endblock %}
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb "User list" "userlist" %}
+{% breadcrumb formuser "userdetail" formuser.id %}
+{% endblock %}
 
 {% block content %}
+<main class="container">
 
 <form method="post" action="">
-{% csrf_token %}
-  <table>
-    {{ form.as_table }}
-  </table>
-  <fieldset {% if object.is_staff or object.is_superuser%} disabled {% endif %}>
-    <input type="submit" name="update" value="Update" />
-    <input type="submit" name="delete" value="Delete" />
+  {% csrf_token %}
+  {% include "form-horizontal.html" %}
+  <fieldset{% if formuser.is_staff or formuser.is_superuser%} disabled{% endif %}>
+    <button class="btn btn-primary" type="submit" name="update">Update</button>
+    <button class="btn btn-danger" type="submit" name="delete">Delete</button>
   </fieldset>
 </form>
-
-<p><a href="{% url "userlist" %}">Back to user list</a></p>
-
+</main>
 {% endblock %}

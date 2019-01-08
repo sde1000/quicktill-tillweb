@@ -2,6 +2,8 @@
 /secret_key
 /database_name
 /till_name
+/currency_symbol
+/foodmenu.py
 *.pyc
 __pycache__
 /static/

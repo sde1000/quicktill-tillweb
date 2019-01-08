@@ -2,20 +2,23 @@
 
 {% block title %}Till user profile{% endblock %}
 
-{% block heading %}Till user profile — {{user.get_full_name}}{% endblock %}
-
 {% block content %}
-<p>You are logged in as {{user.get_full_name}}.</p>
-
-<ul>
-  <li><a href="{% url "tillweb-pubroot" %}">Go to the till</a></li>
-  <li><a href="{% url "password-change-page" %}">Change your password</a></li>
+<nav class="container">
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url "tillweb-pubroot" %}">{{TILLWEB_PUBNAME}} till front page</a>
+    </li>
   {% if may_edit_users %}
-  <li><a href="{% url "userlist" %}">Add or remove users</a></li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url "userlist" %}">Add or remove users</a>
+    </li>
   {% endif %}
   {% if FOOD_MENU_EDITOR %}
-  <li><a href="{% url "tillmenu-index" %}">Edit the food menu</a></li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url "tillmenu-index" %}">Edit the food menu</a>
+    </li>
   {% endif %}
-</ul>
+  </ul>
+</nav>
 
 {% endblock %}

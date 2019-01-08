@@ -3,12 +3,15 @@ from django.http import Http404, HttpResponseRedirect
 from django import forms
 from django.urls import reverse
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from .models import Menu, default_menu
 
 from . import parser
 
 def food_menu_editor_view(func):
+    @login_required
     def check_feature_flag(*args, **kwargs):
         enabled = getattr(settings, "FOOD_MENU_EDITOR", False)
         if not enabled:
@@ -64,12 +67,15 @@ def menu(request, menuid):
         form = MenuForm(request.POST, instance=menu)
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.INFO, "Menu saved")
             return HttpResponseRedirect(reverse('tillmenu-detail',
                                                 args=[menuid]))
     else:
         form = MenuForm(instance=menu)
 
     if request.method == 'POST' and 'delete' in request.POST:
+        messages.add_message(request, messages.INFO,
+                             "Menu '{}' deleted.".format(menu.name))
         menu.delete()
         return HttpResponseRedirect(reverse('tillmenu-index'))
 
@@ -87,6 +93,8 @@ def menu(request, menuid):
             f.write(parser.boilerplate)
             f.write(output)
             f.write('\n')
+        messages.add_message(request, messages.INFO,
+                             "Menu installed on the till")
         return HttpResponseRedirect(reverse('tillmenu-detail', args=[menuid]))
 
     return render(request, "tillmenu/menu.html",

@@ -1,0 +1,33 @@
+{% load widget_tweaks %}
+{% if form.is_bound %}
+  {% if field.errors %}
+    {% if field.field.widget.input_type == "file" %}
+      {% render_field field class+="form-control-file is-invalid" %}
+    {% elif field.field.widget.input_type == "checkbox" %}
+      {% render_field field class+="form-check-input is-invalid" %}
+    {% else %}
+      {% render_field field class+="form-control is-invalid" %}
+    {% endif %}
+    {% for error in field.errors %}
+      <div class="invalid-feedback">
+        {{ error }}
+      </div>
+    {% endfor %}
+  {% else %}
+    {% if field.field.widget.input_type == "file" %}
+      {% render_field field class+="form-control is-valid" %}
+    {% elif field.field.widget.input_type == "checkbox" %}
+      {% render_field field class+="form-check-input is-valid" %}
+    {% else %}
+      {% render_field field class+="form-control is-valid" %}
+    {% endif %}
+  {% endif %}
+{% else %}
+  {% if field.field.widget.input_type == "file" %}
+    {% render_field field class+="form-control-file" %}
+  {% elif field.field.widget.input_type == "checkbox" %}
+    {% render_field field class+="form-check-input" %}
+  {% else %}
+    {% render_field field class+="form-control" %}
+  {% endif %}
+{% endif %}

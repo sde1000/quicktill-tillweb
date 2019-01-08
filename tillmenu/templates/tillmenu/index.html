@@ -1,10 +1,14 @@
 {% extends "base.html" %}
+{% load django_bootstrap_breadcrumbs %}
 
 {% block title %}Menus{% endblock %}
-{% block heading %}Menus{% endblock %}
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb "Food menus" "tillmenu-index" %}
+{% endblock %}
 
 {% block content %}
-
+<main class="container">
 {% if menus %}
 <p>Available menus:</p>
 <ul>
@@ -19,8 +23,8 @@
 <p>Add a new menu:</p>
 
 <form action="" method="post">{% csrf_token %}
-  {{form.as_p}}
-  <input type="submit" name="addmenu" value="Add new menu" />
+{% include "form-horizontal.html" %}
+  <button class="btn btn-primary" type="submit" name="addmenu">Add new menu</button>
 </form>
-
+</main>
 {% endblock %}

@@ -1,7 +1,12 @@
 {% extends "base.html" %}
+{% load django_bootstrap_breadcrumbs %}
 
 {% block title %}Menu: {{menu.name}}{% endblock %}
-{% block heading %}Menu: {{menu.name}}{% endblock %}
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb "Food menus" "tillmenu-index" %}
+{% breadcrumb menu.name "tillmenu-detail" menu.pk %}
+{% endblock %}
 
 {% block content %}
 <script type="text/javascript">
@@ -10,30 +15,30 @@
   document.getElementById('validmenu').style.display = 'none';
   }
 </script>
+<main class="container">
 
-<form action="" method="post">{% csrf_token %}
-  <table>
-    {{form.as_table}}
-  </table>
-  <input type="submit" name="save" value="Save menu" />
+  <form action="" method="post">{% csrf_token %}
+    {% include "form.html" %}
+    <button class="btn btn-primary" type="submit" name="save">Save menu</button>
 
 {% if error %}
-  <p class="error">Error parsing the menu: {{error}}</p>
-  <p>Update and re-save to check again.</p>
-  {% else %}
-  <div id="validmenu">
-    <p>The menu is valid.  The menu file for the till is:</p>
-    <p>{{output}}</p>
-    <input type="submit" id="activate" name="activate" value="Install this menu on the till" />
-  </div>
+    <p class="error">Error parsing the menu: {{error}}</p>
+    <p>Update and re-save to check again.</p>
+{% else %}
+    <div id="validmenu">
+      <p>The menu is valid.  The menu file for the till is:</p>
+      <p>{{output}}</p>
+      <button class="btn btn-secondary" type="submit" id="activate" name="activate">
+	Install this menu on the till
+      </button>
+    </div>
 {% endif %}
-</form>
+  </form>
 
-<p>If you aren't going to use this menu any more, you can delete it.</p>
+  <p>If you aren't going to use this menu any more, you can delete it.</p>
 
-<form action="" method="post">{% csrf_token %}
-  <input type="submit" name="delete" value="Delete menu" />
-</form>
-
-<p><a href="{% url "tillmenu-index" %}">Back to list of menus</a></p>
+  <form action="" method="post">{% csrf_token %}
+    <button class="btn btn-danger" type="submit" name="delete">Delete menu</button>
+  </form>
+</main>
 {% endblock %}

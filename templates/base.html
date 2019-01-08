@@ -1,51 +1,94 @@
-{% load staticfiles %}
+{% load static %}
+{% load django_bootstrap_breadcrumbs %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>{% block title %}tillweb{% endblock %}</title>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<head>
+<title>{% block title %}tillweb{% endblock %}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% block style %}
-    <link rel="STYLESHEET" type="text/css" href="{% static "style.css" %}">
+<link rel="STYLESHEET" type="text/css" href="{% static "bootstrap/bootstrap.css" %}">
 {% endblock %}
 {% block jquery %}
+{% if user.is_authenticated %}
+<link rel="STYLESHEET" type="text/css" href="{% static "jquery/jquery-ui.css" %}">
+<script type="text/javascript" src="{% static "jquery.js" %}"></script>
+<script type="text/javascript" src="{% static "jquery-ui.js" %}"></script>
+{% endif %}
 {% endblock %}
-  </head>
-  <body>
-    <header>{% block heading %}Heading{% endblock %}
-      {% if is_paginated %} — page {{ page }} of {{ pages }}{% endif %}
-    </header>
-
-    <nav>
-      {% if user.is_authenticated %}
-      <div id="Userinfo">
-	<p>Logged in as <a href="{% url "user-profile-page" %}">{{ user.get_full_name }}</a>.  <a href="/accounts/logout/">Log out.</a>{% if admin_url and user.is_staff %}<a href="{{admin_url}}">  Edit in admin</a>.{% endif %}{% if user.is_staff %}<a href="{% url "admin:index" %}">  Go to admin.</a>{% endif %}</p>
+{% block scripts %}
+{% if user.is_authenticated %}
+<script type="text/javascript" src="{% static "bootstrap/bootstrap.js" %}"></script>
+{% endif %}
+{% endblock %}
+</head>
+{% block breadcrumbs %}
+{% breadcrumb "Home" "user-profile-page" %}
+{% endblock %}
+<body>
+{% block nav %}
+<nav>
+  <div class="navbar navbar-expand-sm navbar-light bg-light sticky-top">
+    <a class="navbar-brand" href="/">{{ TILLWEB_PUBNAME }}</a>
+{% if user.is_authenticated %}
+    <button type="button" class="navbar-toggler ml-auto" data-toggle="collapse" data-target="#TopNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="TopNavbar">
+      <div class="navbar-nav mr-auto"></div>
+      {% if nextlink or prevlink %}
+      <div class="nav-item mr-2">
+	{% if prevlink %}
+	<a href="{{prevlink}}">
+	  <img src="{% static "left-arrow.svg" %}" width="40" alt="Prev">
+	</a>
+	{% endif %}
+	{% if nextlink %}
+	<a href="{{nextlink}}">
+	  <img src="{% static "right-arrow.svg" %}" width="40" alt="Next">
+	</a>
+	{% endif %}
       </div>
       {% endif %}
-
-      {% if nextlink %}
-      <div class="navarrow">
-	<a href="{{nextlink}}"><img src="{% static "right-arrow.svg" %}" width="40" alt="
-Next" />
-      </a></div>
-      {% endif %}
-      {% if prevlink %}
-      <div class="navarrow">
-	<a href="{{prevlink}}"><img src="{% static "left-arrow.svg" %}" width="40" alt="Prev" />
-      </a></div>
-      {% endif %}
-      {% if messages %}
-      <div class="messages" id="messagediv">
-	<ul>
-	  {% for message in messages %}
-	  <li>{{message}}</li>
-	  {% endfor %}
-	</ul>
+      {% if admin_url and user.is_staff %}
+      <div class="nav-item">
+	<a class="nav-link" href="{{admin_url}}">Edit this page</a>
       </div>
       {% endif %}
-    </nav>
-    <div id="Content">
-      {% block content %}
-      {% endblock %}
+      {% if user.is_staff %}
+      <div class="nav-item">
+	<a class="nav-link" href="{% url "admin:index" %}">Admin</a>
+      </div>
+      {% endif %}
+      <div class="nav-item dropdown">
+	<button class="btn btn-secondary dropdown-toggle" type="button" id="TopNavbarUserDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	  {{ user.get_full_name }}
+	</button>
+	<div class="dropdown-menu dropdown-menu-right" aria-labelledby="TopNavbarUserDropdown">
+	  <a class="dropdown-item" href="{% url "password-change-page" %}">Change password</a>
+	  <a class="dropdown-item" href="{% url "logout-page" %}">Log out</a>
+	</div>
+      </div>
     </div>
-  </body>
+{% endif %}
+  </div>
+</nav>
+{% render_breadcrumbs "breadcrumbs.html" %}
+{% endblock %}
+{% if messages %}
+<div class="container">
+  {% for message in messages %}
+  <div class="alert alert-primary alert-dismissable fade show">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% block content %}
+<p>Some content for the page.</p>
+{% endblock %}
+</body>
 </html>

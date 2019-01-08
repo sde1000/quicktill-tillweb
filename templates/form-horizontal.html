@@ -1,0 +1,25 @@
+{% load widget_tweaks %}
+
+{% for hidden_field in form.hidden_fields %}
+  {{ hidden_field }}
+{% endfor %}
+
+{% if form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">
+    {% for error in form.non_field_errors %}
+      {{ error }}
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% for field in form.visible_fields %}
+  <div class="form-group row align-items-center">
+    <label for="{{ field.id_for_label }}" class="col-sm-4 col-md-3 col-lg-2 col-form-label">{{ field.label }}</label>
+    <div class="col-sm-8 col-md-9 col-lg-10">
+      {% include "form-field.html" %}
+      {% if field.help_text %}
+        <small class="form-text text-muted">{{ field.help_text }}</small>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}

@@ -2,13 +2,18 @@
 
 {% block title %}Till logout{% endblock %}
 
-{% block heading %}Till logout{% endblock %}
-
 {% block content %}
+<main class="container">
+  <p>You are now logged out.</p>
 
-<p>You are now logged out.</p>
-
-<p><a href="{% url "login-page" %}">Log in again</a></p>
-<p><a href="{% url "frontpage" %}">Back to front page</a></p>
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url "login-page" %}">Log in again</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url "frontpage" %}">Back to front page</a>
+    </li>
+  </ul>
+</main>
 
 {% endblock %}

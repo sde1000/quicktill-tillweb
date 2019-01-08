@@ -2,10 +2,10 @@
 
 {% block title %}{{pubname}}{% endblock %}
 
-{% block heading %}{{pubname}}{% endblock %}
-
 {% block content %}
 
-<p><a href="{% url "tillweb-pubroot" %}">Go to till detail page</a></p>
+<main class="container text-center">
+  <a class="btn btn-primary w-100" href="{% url "tillweb-pubroot" %}">Start</a>
+</main>
 
 {% endblock %}

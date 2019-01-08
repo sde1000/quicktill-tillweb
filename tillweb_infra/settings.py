@@ -37,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
+    'django_bootstrap_breadcrumbs',
+    'widget_tweaks',
     'quicktill.tillweb',
     'tillmenu',
 )
@@ -65,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'tillweb_infra.context_processors.pubname_setting',
                 'tillmenu.context_processors.food_menu_editor_setting',
             ],
         },
@@ -116,7 +119,11 @@ ABSOLUTE_URL_OVERRIDES = {
 from .settings_database import *
 
 # Feature flags
-FOOD_MENU_EDITOR = False
+FOOD_MENU_EDITOR = True
+
+# Currency symbol
+with open(os.path.join(BASE_DIR, "currency_symbol")) as f:
+    TILLWEB_MONEY_SYMBOL = f.readline().strip()
 
 # Logging - when running testserver, output SQL queries and responses
 LOGGING = {
