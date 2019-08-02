@@ -1,0 +1,21 @@
+[Unit]
+Description=Till web interface
+AssertPathExists=%h/tillweb/systemd/tillweb-uwsgi.conf
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=%h/tillweb
+Environment=DJANGO_SETTINGS_MODULE=tillweb_infra.settings_production
+
+; Uncomment the next line if working on a copy of quicktill in your
+; home directory instead of the system-installed copy
+; Environment=PYTHONPATH=%h/quicktill
+
+Type=notify
+ExecStartPre=%h/tillweb/systemd/setup.sh
+ExecStart=/usr/bin/uwsgi --ini=%h/tillweb/systemd/tillweb-uwsgi.conf
+KillSignal=SIGINT
+
+[Install]
+WantedBy=default.target
