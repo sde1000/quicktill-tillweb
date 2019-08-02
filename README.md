@@ -20,7 +20,8 @@ To configure, create the following files in the same directory as this README:
 Create a python3 virtualenv called `venv` and install all the
 requirements from `requirements.txt` in it:
 
-```virtualenv --system-site-packages -p python3 venv
+```
+virtualenv --system-site-packages -p python3 venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -59,7 +60,8 @@ start automatically when you log in and stop when you log out.)
 Copy systemd/tillweb.service to ~/.config/systemd/user/,
 edit if necessary to set PYTHONPATH, and enable it:
 
-```mkdir -p ~/.config/systemd/user
+```
+mkdir -p ~/.config/systemd/user
 cp systemd/tillweb.service ~/.config/systemd/user/
 sensible-editor ~/.config/systemd/user/tillweb.service
 systemctl --user enable tillweb.service
