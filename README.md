@@ -65,4 +65,5 @@ mkdir -p ~/.config/systemd/user
 cp systemd/tillweb.service ~/.config/systemd/user/
 sensible-editor ~/.config/systemd/user/tillweb.service
 systemctl --user enable tillweb.service
-systemctl --user start tillweb.service```
+systemctl --user start tillweb.service
+```
