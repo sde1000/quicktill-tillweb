@@ -114,6 +114,16 @@ ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda o: "/accounts/users/%d/" % o.id,
 }
 
+# Messages system: set Bootstrap theme tags for message tags
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-secondary',
+    messages.INFO: 'alert-primary',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
+
 # Till database access
 
 from .settings_database import *
