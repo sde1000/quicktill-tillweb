@@ -76,6 +76,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tillweb_infra.wsgi.application'
 
+# The stock-take data entry page can have LOTS of small fields.  We
+# need to raise this parameter from the default of 1000 for large stock-takes.
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
