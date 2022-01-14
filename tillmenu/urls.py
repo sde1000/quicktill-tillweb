@@ -1,7 +1,7 @@
-from django.conf.urls import include, url
+from django.urls import path
 from .views import *
 
 urlpatterns = [
-    url(r'^$', index, name="tillmenu-index"),
-    url(r'^(?P<menuid>\d+)/$', menu, name="tillmenu-detail"),
+    path('', index, name="tillmenu-index"),
+    path('<int:menuid>/', menu, name="tillmenu-detail"),
 ]
