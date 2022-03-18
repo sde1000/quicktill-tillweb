@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% block style %}
-<link rel="STYLESHEET" type="text/css" href="{% static "bootstrap/bootstrap.css" %}">
+<link rel="STYLESHEET" type="text/css" href="{% static "bootstrap/css/bootstrap.min.css" %}">
 {% endblock %}
 {% block jquery %}
 {% if user.is_authenticated %}
@@ -18,7 +18,7 @@
 {% endblock %}
 {% block scripts %}
 {% if user.is_authenticated %}
-<script type="text/javascript" src="{% static "bootstrap/bootstrap.js" %}"></script>
+<script type="text/javascript" src="{% static "bootstrap/js/bootstrap.bundle.min.js" %}"></script>
 {% endif %}
 {% endblock %}
 </head>
