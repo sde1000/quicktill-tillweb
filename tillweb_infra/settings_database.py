@@ -21,8 +21,8 @@ TILLWEB_SINGLE_SITE = True
 TILLWEB_DATABASE = sessionmaker(
     bind=create_engine(
         'postgresql+psycopg2:///{}'.format(TILLWEB_DATABASE_NAME),
-        pool_size=32, pool_recycle=600),
-    info={'pubname': 'detail', 'reverse': reverse})
+        pool_size=32, pool_recycle=600, future=True),
+    info={'pubname': 'detail', 'reverse': reverse}, future=True)
 with open(os.path.join(base_dir, "till_name")) as f:
     TILLWEB_PUBNAME = f.readline().strip()
 TILLWEB_LOGIN_REQUIRED = True
