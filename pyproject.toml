@@ -16,7 +16,7 @@ psycopg2 = "~2.9"
 odfpy = "~1.4"
 sqlalchemy = "~2.0"
 quicktill = { path = "../quicktill", extras = ["tillweb"], develop = true }
-setuptools = "^72.1.0"
+setuptools = "^78.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
