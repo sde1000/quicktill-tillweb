@@ -7,19 +7,20 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
+from django.urls import reverse
+from pathlib import Path
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 # This is the base settings file.  In production use, this file is
 # imported by settings_production.py and some settings are added
 # and/or changed.
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
-
-# BASE_DIR is the root of the whole project, i.e. the directory where
-# the manage.py script is
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(BASE_DIR, "secret_key")) as f:
+with open(BASE_DIR / 'config' / 'secret_key') as f:
     SECRET_KEY = f.readline().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -57,7 +58,8 @@ ROOT_URLCONF = 'tillweb_infra.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates"),
+        'DIRS': [
+            BASE_DIR / "templates",
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -84,7 +86,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': BASE_DIR / 'database' / 'db.sqlite3',
     }
 }
 
@@ -104,11 +106,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 LANGUAGE_CODE = 'en-GB'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/London'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -116,8 +118,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static-dist"),
+    BASE_DIR / "static-dist",
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
 
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda o: "/accounts/users/%d/" % o.id,
@@ -133,15 +138,8 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-# Till database access
-
-from .settings_database import *
-
-# Feature flags
-FOOD_MENU_EDITOR = True
-
 # Currency symbol
-with open(os.path.join(BASE_DIR, "currency_symbol")) as f:
+with open(BASE_DIR / "config" / "currency_symbol") as f:
     TILLWEB_MONEY_SYMBOL = f.readline().strip()
 
 # Logging - when running testserver, output SQL queries and responses
@@ -161,3 +159,25 @@ LOGGING = {
 #        },
 #    },
 }
+
+# Access to till database
+
+# We read the files 'database_name' and 'till_name' in the config
+# directory and set up tillweb in single-till mode.
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+with open(BASE_DIR / "config" / "database_name") as f:
+    TILLWEB_DATABASE_NAME = f.readline().strip()
+
+TILLWEB_SINGLE_SITE = True
+TILLWEB_DATABASE = sessionmaker(
+    bind=create_engine(
+        'postgresql+psycopg2:///{}'.format(TILLWEB_DATABASE_NAME),
+        pool_size=32, pool_recycle=600, future=True),
+    info={'pubname': 'detail', 'reverse': reverse}, future=True)
+with open(BASE_DIR / "config" / "till_name") as f:
+    TILLWEB_PUBNAME = f.readline().strip()
+TILLWEB_LOGIN_REQUIRED = True
+TILLWEB_DEFAULT_ACCESS = "M"

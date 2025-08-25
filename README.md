@@ -25,9 +25,10 @@ Install the project dependencies:
 poetry install
 ```
 
-To configure, create the following files in the same directory as this README:
+To configure, create the following files in the `config` directory:
 
- * a random secret in the file `secret_key`
+ * a random secret in the file `secret_key`: try `python3 -c "import
+   secrets; print(secrets.token_urlsafe())" >config/secret_key`
 
  * the name of the till database in the file `database_name`
 
