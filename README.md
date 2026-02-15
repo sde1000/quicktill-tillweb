@@ -1,6 +1,8 @@
 Till web service
 ================
 
+**NO LONGER MAINTAINED: use the [tillweb](https://github.com/sde1000/tillweb/) repository instead**
+
 Minimal infrastructure needed to bring up an instance of
 `quicktill.tillweb` as a uwsgi service.
 
